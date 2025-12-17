@@ -1,5 +1,3 @@
----
-
 ### Phase 1 (Days 1–4): Foundations
 
 Goal: Auth works, roles exist, basic entities and APIs in place.
