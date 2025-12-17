@@ -37,5 +37,3 @@ Work will be organized in slices: first, core authentication and role setup; the
 For an MVP-plus scope, we can plan roughly three implementation phases: first, build and stabilize core authentication, roles, projects, and basic issue CRUD with state transitions and audit logging; second, add assignees, labels, comments, severity/priority, search/filtering, and a usable dashboard; third, layer on attachments, saved filters, activity views, and basic SLA indicators. Each phase should be demonstrable on its own and deployed to a test environment, with feedback collected between phases to refine the next tranche of work.
 
 ---
-
-If you want, next we can break this into a concrete backlog for your 2-person team (with sprint-sized chunks) so you know exactly what to tackle first.
