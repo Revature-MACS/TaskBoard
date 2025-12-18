@@ -33,5 +33,9 @@ public class Issue {
 
     //Subject to change
     @Column(nullable = false)
-    private String dateTime;
+    private Long timeCreatedAtEpoch;
+
+    //Subject to change
+    @Column
+    private Long timeUpdatedAtEpoch;
 }
