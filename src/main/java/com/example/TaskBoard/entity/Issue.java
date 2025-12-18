@@ -25,9 +25,8 @@ public class Issue {
     @Column(nullable = false)
     private String description;
 
-    //Subject to change (0 - Closed, 1 - Open)
     @Column(nullable = false)
-    private boolean status;
+    private int status;
 
     @Column(nullable = false)
     private int priority;
