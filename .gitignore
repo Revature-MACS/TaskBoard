@@ -95,6 +95,9 @@ modules.xml
 # Log file
 *.log
 
+#removes sqlite files
+*.sqlite
+
 # BlueJ files
 *.ctxt
 
