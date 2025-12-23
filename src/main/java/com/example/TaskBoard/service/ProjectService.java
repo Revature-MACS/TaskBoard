@@ -1,6 +1,7 @@
 package com.example.TaskBoard.service;
 
 import com.example.TaskBoard.entity.Project;
+import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.ProjectRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,9 @@ public class ProjectService {
     // DELETE /projects/{id} - Delete project (Admin only)
     public void deleteProject(UUID projectId) {
         projectRepository.deleteById(projectId);
+    }
+
+    public List<Project> getProjectsByOwnerEmail(String ownerEmail) {
+        return projectRepository.findByOwner_Email(ownerEmail);
     }
 }

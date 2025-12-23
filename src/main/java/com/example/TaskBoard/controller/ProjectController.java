@@ -1,6 +1,7 @@
 package com.example.TaskBoard.controller;
 
 import com.example.TaskBoard.entity.Project;
+import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.service.ProjectService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,12 @@ public class ProjectController {
         Optional<Project> project = projectService.getProjectById(id);
         return project.map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
+    }
+
+    // GET /projects/owner/{ownerEmail}
+    @GetMapping("/owner/{ownerEmail}")
+    public List<Project> getProjectsByOwner(@PathVariable String ownerEmail) {
+        return projectService.getProjectsByOwnerEmail(ownerEmail);
     }
 
     // POST /projects - Create project (Admin only - security added later)
