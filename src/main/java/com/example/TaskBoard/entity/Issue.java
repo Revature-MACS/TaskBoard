@@ -33,7 +33,7 @@ public class Issue {
     private int severity;
 
     //Subject to change
-    @Column(nullable = false)
+    @Column()
     private Long timeCreatedAtEpoch;
 
     //Subject to change

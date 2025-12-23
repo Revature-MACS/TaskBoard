@@ -37,15 +37,18 @@ public class IssueService {
     public Issue findByIssueId(UUID issueID){
         Optional<Issue> issue = issueRepository.findById(issueID);
         return issue.orElse(null);
+
     }
 
-    public void updateStatus(UUID issueID, int status){
+    public Issue updateStatus(UUID issueID, int status){
         Optional<Issue> optionalIssue = issueRepository.findById(issueID);
-        if(optionalIssue.isPresent())
-        {
+        if(optionalIssue.isPresent()) {
             Issue issue = optionalIssue.get();
             issue.setStatus(status);
-            issueRepository.save(issue);
+            return issueRepository.save(issue);
+        }
+        else {
+            return null;
         }
     }
 
