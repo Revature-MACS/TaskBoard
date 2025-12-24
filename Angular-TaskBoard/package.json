@@ -1,5 +1,5 @@
 {
-  "name": "task-board",
+  "name": "angular-task-board",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
