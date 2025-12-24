@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f8c0507f-526d-4a8b-911b-4fd3407af3e2" name="Changes" comment="Created IssueController and updated IssueService. Endpoints in IssueController will likely need to be updated in the future.">
+      <change beforePath="$PROJECT_DIR$/.gitattributes" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/HELP.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/PRD.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/SPRINT.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradlew.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/TaskBoardApplication.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/entity/Issue.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/entity/Project.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/entity/User.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/repository/IssueRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/repository/ProjectRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/TaskBoard/repository/UserRepository.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/example/TaskBoard/TaskBoardApplicationTests.java" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;ajsiragusa&quot;
+  }
+}</component>
+  <component name="GithubProjectSettings">
+    <option name="branchProtectionPatterns">
+      <list>
+        <option value="main" />
+      </list>
+    </option>
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/ajsiragusa/TaskBoard.git&quot;,
+    &quot;accountId&quot;: &quot;b7fb30bd-b372-4a30-8ea5-f48af8ab879b&quot;
+  }
+}</component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 6
+}</component>
+  <component name="ProjectId" id="3727vBDhZ572cpOi1ICYJxzF3iW" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build TaskBoard.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "Spring Boot.TaskBoardApplication.executor": "Run",
+    "git-widget-placeholder": "chore/Update-Project-Structure",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Anthony/Desktop/Project/TaskBoard"
+  }
+}]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-30f59d01ecdd-26cb7f24e5b0-intellij.indexing.shared.core-IU-253.29346.138" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f8c0507f-526d-4a8b-911b-4fd3407af3e2" name="Changes" comment="" />
+      <created>1766089541041</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1766089541041</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Configured build.gradle and application.properties to setup the database">
+      <option name="closed" value="true" />
+      <created>1766090465166</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1766090465166</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Updated gitignore file to include sqlite databases">
+      <option name="closed" value="true" />
+      <created>1766091307194</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1766091307194</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Created and implemented issue entity class">
+      <option name="closed" value="true" />
+      <created>1766093224556</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1766093224557</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Modified status type to account for 4 different states">
+      <option name="closed" value="true" />
+      <created>1766093388941</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1766093388941</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Updated time tracking variable and added additional variable timeUpdatedAtEpoch">
+      <option name="closed" value="true" />
+      <created>1766093802531</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1766093802531</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Updated issueID to have a generated UUID and set status to 0 upon creation for all issues">
+      <option name="closed" value="true" />
+      <created>1766094740389</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1766094740389</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Created and setup IssueRepository">
+      <option name="closed" value="true" />
+      <created>1766178442425</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1766178442425</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Updated Issue entity to accommodate status(open, in progress, closed), priority(low, normal, high), and severity per the Entities MVP. Started IssueService class and implemented basic crud operations.">
+      <option name="closed" value="true" />
+      <created>1766438611229</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1766438611229</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Created IssueController and updated IssueService. Endpoints in IssueController will likely need to be updated in the future.">
+      <option name="closed" value="true" />
+      <created>1766527329495</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1766527329495</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Configured build.gradle and application.properties to setup the database" />
+    <MESSAGE value="Updated gitignore file to include sqlite databases" />
+    <MESSAGE value="Created and implemented issue entity class" />
+    <MESSAGE value="Modified status type to account for 4 different states" />
+    <MESSAGE value="Updated time tracking variable and added additional variable timeUpdatedAtEpoch" />
+    <MESSAGE value="Updated issueID to have a generated UUID and set status to 0 upon creation for all issues" />
+    <MESSAGE value="Created and setup IssueRepository" />
+    <MESSAGE value="Updated Issue entity to accommodate status(open, in progress, closed), priority(low, normal, high), and severity per the Entities MVP. Started IssueService class and implemented basic crud operations." />
+    <MESSAGE value="Created IssueController and updated IssueService. Endpoints in IssueController will likely need to be updated in the future." />
+    <option name="LAST_COMMIT_MESSAGE" value="Created IssueController and updated IssueService. Endpoints in IssueController will likely need to be updated in the future." />
+  </component>
+</project>
