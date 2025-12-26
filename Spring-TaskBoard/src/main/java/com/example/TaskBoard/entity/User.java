@@ -12,9 +12,15 @@ import java.util.UUID;
 @Table(name = "users")
 public class User {
 
+    public enum UserRole {ADMIN, DEVELOPER, TESTER};
+
     //User ID which is assigned when the user is added to the database
     @Id
-    @Column(nullable = false)
+    @Column(name = "user_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID userID;
+
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
@@ -23,7 +29,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    //Potentially use ENUMS to define this role instead of strings
     @Column(nullable = false)
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
 }

@@ -24,7 +24,7 @@ public class Project {
     private String description;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", referencedColumnName = "email")
     private User owner;
 
     @Column(name = "created_at", nullable = false, updatable = false)
