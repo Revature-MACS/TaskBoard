@@ -32,6 +32,11 @@ public class Issue {
     @Column(nullable = false)
     private int severity;
 
+    /*
+    @Column()
+    private List<Comment> comments;
+     */
+
     //Subject to change
     @Column()
     private Long timeCreatedAtEpoch;
