@@ -2,15 +2,9 @@ package com.example.TaskBoard.service;
 
 import com.example.TaskBoard.entity.Issue;
 import com.example.TaskBoard.repository.IssueRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.*;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.github.fge.jsonpatch.JsonPatch;
-import com.github.fge.jsonpatch.JsonPatchException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tools.jackson.core.TreeNode;
 import tools.jackson.databind.ObjectMapper;
 
 import java.util.List;

@@ -3,7 +3,11 @@ package com.example.TaskBoard.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
@@ -37,11 +41,19 @@ public class Issue {
     private List<Comment> comments;
      */
 
-    //Subject to change
-    @Column()
-    private Long timeCreatedAtEpoch;
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Date timeCreatedAtEpoch;
 
-    //Subject to change
-    @Column
-    private Long timeUpdatedAtEpoch;
+    @Column(name = "updated_at")
+    private Date timeUpdatedAtEpoch;
+
+    @PrePersist
+    protected void onCreate() {
+        timeCreatedAtEpoch = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        timeUpdatedAtEpoch = new Date();
+    }
 }
