@@ -1,6 +1,9 @@
 package com.example.TaskBoard.controller;
 
+import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.User;
+import com.example.TaskBoard.service.ProjectService;
+import com.example.TaskBoard.service.ProjectUserService;
 import com.example.TaskBoard.service.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,11 +21,8 @@ import java.util.Optional;
 public class UserController {
 
     private final UserService userService;
+    private final ProjectUserService projectUserService;
 
-    /*
-    Need to wait until the project service is merged to main
-    private final ProjectService projectService;
-     */
     @GetMapping()
     public ResponseEntity<List<User>> getAllUser(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
@@ -88,6 +88,26 @@ public class UserController {
         else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+    }
+
+    public ResponseEntity<Integer> assignUsersToProject(@RequestBody Project project,
+                                                        @RequestBody List<User> users){
+        /*
+            Instead of stopping code execution if one of the users can't be added,
+            the function adds all users it can and then returns the number of users
+            successfully added to the given project in the response.
+         */
+        int numAddedSuccessfully = 0;
+        for (User user : users) {
+            try {
+                projectUserService.assignUserToProject(user, project);
+                numAddedSuccessfully++;
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(numAddedSuccessfully);
     }
 
 }
