@@ -60,9 +60,9 @@ public class ProjectUserService {
         if(proRepo.findById((project.getProjectId())).isEmpty()){
             throw new SQLException(("Project with projectID " + project.getProjectId() + " does not exist!"));
         }
-        Optional<ProjectUser> temp = proUserRepo.findProjectUserByUserAndProject(newAssignedPair.getUser(), newAssignedPair.getProject());
-        if(temp.isPresent()){
-            throw new SQLException("User is already assigned to the project!\n" + temp.get());
+        if(proUserRepo.findProjectUserByUserAndProject
+                (newAssignedPair.getUser(), newAssignedPair.getProject()).isPresent()){
+            throw new SQLException("User is already assigned to the project!");
         }
 
         return proUserRepo.save(newAssignedPair);
