@@ -48,6 +48,7 @@ public class UserService {
            If searching for the email returns an entry, then an account associated with
            the given email must already exist. Since this is this attribute is unique,
            this would result in an SQLException.
+
            Keep in mind that findUserByEmail returns an Optional<User>
          */
         if(userRepo.findUserByEmail(userInfo.getEmail()).isPresent()){
@@ -97,6 +98,7 @@ public class UserService {
         This queries the database for user information that match the provided
         email and password. If the query does not return anything, the email-password
         combination is invalid and the user will not log in.
+
         For now, it returns the user information, if any exist.
         */
 
