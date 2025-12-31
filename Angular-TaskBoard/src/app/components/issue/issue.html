@@ -1,42 +1,88 @@
-<h1>{{ headerText }}</h1>
-<h2>{{ createIssueInstructions }}</h2>
-<input type="text" placeholder="Title" [(ngModel)]="titleText">
-<input type="text" placeholder="Description" [(ngModel)]="descriptionText">
-<input [type]="searchType" placeholder="Status" [(ngModel)]="statusValue">
-<input [type]="searchType" placeholder="Priority" [(ngModel)]="priorityValue">
-<input [type]="searchType" placeholder="Severity" [(ngModel)]="severityValue">
+<div class="container">
+    <h1>This is a page to test Issue API</h1>
 
-<h2>{{ issueTitle() }}</h2>
-<h2>{{ issueDescription() }}</h2>
-<h2>{{ issueStatus() }}</h2>
-<h2>{{ issuePriority() }}</h2>
-<h2>{{ issueSeverity() }}</h2>
+    <div>
+        <h2>Create Issue</h2>
+        <input type="text" placeholder="Title" [(ngModel)]="titleText">
+        <br>
+        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
+        <br>
+        <p style="display:inline">Status: </p>
+        <select [(ngModel)]="statusValue">
+            @for (item of issueStatusList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <p style="display:inline">Priority: </p>
+        <select [(ngModel)]="priorityValue">
+            @for (item of lowMedHighList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <p style="display:inline">Severity: </p>
+        <select [(ngModel)]="severityValue">
+            @for (item of lowMedHighList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <br>
+        <button (click)="postIssue()">Submit</button>
+    </div>
+    
+    <div>
+        <h2>Fetch Issue by ID</h2>
+        <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
+        <button (click)="getIssue()">Submit</button>
+        <h2>{{ issueId() }}</h2>
+    </div>
+    
+    <div>
+        <h2>Fetch ALL issues</h2>
+        <button (click)="getIssues()">Fetch Issues</button>
+    </div>
+    
+    <div>
+        <h2>Issue to delete</h2>
+        <input type="text" placeholder="Issue ID" [(ngModel)]="idDeleteValue">
+        <button (click)="deleteIssue()">Submit</button>
+        <h2>{{ issueDeleteId() }}</h2>
+    </div>
+    
+    <div>
+        <h2>Issue to Update</h2>
+        <input type="text" placeholder="Id" [(ngModel)]="updateIdText">
+        <br>
+        <input type="text" placeholder="Title" [(ngModel)]="updateTitleText">
+        <br>
+        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
+        <br>
+        <p style="display: inline;">Status: </p>
+        <select [(ngModel)]="updateStatusValue">
+            @for (item of issueStatusList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <p style="display: inline;">Priority: </p>
+        <select [(ngModel)]="updatePriorityValue">
+            @for (item of lowMedHighList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <p style="display: inline;">Severity: </p>
+        <select [(ngModel)]="updateSeverityValue">
+            @for (item of lowMedHighList; track $index) {
+                <option [ngValue]="item">{{ item }}</option>
+            }
+        </select>
+        <br>
+        <button (click)="updateIssue()">Submit</button>
+    </div>
+</div>
 
-<button (click)="postIssue()">Submit</button>
-<br>
-<br>
-<h2>Fetch Issue by ID</h2>
-<input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
-<button (click)="getIssue()">Submit</button>
-<h2>{{ issueId() }}</h2>
-<br>
-<br>
-<h2>Fetch ALL issues</h2>
-<button (click)="getIssues()">Fetch Issues</button>
-<br>
-<br>
-<h2>Issue to delete</h2>
-<input type="text" placeholder="Issue ID" [(ngModel)]="idDeleteValue">
-<button (click)="deleteIssue()">Submit</button>
-<h2>{{ issueDeleteId() }}</h2>
-<br>
-<br>
-<h2>Issue to Update</h2>
-<input type="text" placeholder="Id" [(ngModel)]="updateIdText">
-<input type="text" placeholder="Title" [(ngModel)]="updateTitleText">
-<input type="text" placeholder="Description" [(ngModel)]="updateDescriptionText">
-<input [type]="searchType" placeholder="Status" [(ngModel)]="updateStatusValue">
-<input [type]="searchType" placeholder="Priority" [(ngModel)]="updatePriorityValue">
-<input [type]="searchType" placeholder="Severity" [(ngModel)]="updateSeverityValue">
-<button (click)="updateIssue()">Submit</button>
+
 

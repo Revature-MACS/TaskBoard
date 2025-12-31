@@ -14,8 +14,6 @@ import java.util.UUID;
 public class IssueService {
 
     private IssueRepository issueRepository;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     public IssueService(IssueRepository issueRepository){
