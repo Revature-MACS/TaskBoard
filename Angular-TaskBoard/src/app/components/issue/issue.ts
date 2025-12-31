@@ -14,8 +14,8 @@ export class Issue {
 
   }
 
-  headerText: string = "This is a page to test the Issue API";
-  createIssueInstructions: string = "Create Issue";
+  issueStatusList: string[] = ["Open", "In progress", "Resolved", "Closed"];
+  lowMedHighList: string[] = ["Low", "Medium", "High"];
   searchType: string = "number";
 
   issueTitle: WritableSignal<string> = signal("");
@@ -35,21 +35,21 @@ export class Issue {
 
   titleText: string = "";
   descriptionText: string = "";
-  statusValue: string = "";
-  priorityValue: string = "";
-  severityValue: string = "";
+  statusValue: string = "Open";
+  priorityValue: string = "Low";
+  severityValue: string = "Low";
   idValue: string = "";
   idDeleteValue: string = "";
 
   updateTitleText: string = "";
   updateDescriptionText: string = "";
-  updateStatusValue: string = "";
-  updatePriorityValue: string = "";
-  updateSeverityValue: string = "";
+  updateStatusValue: string = "Open";
+  updatePriorityValue: string = "Low";
+  updateSeverityValue: string = "Low";
   updateIdText: string = "";
 
   postIssue(){
-    this.issueService.postIssue(this.titleText, this.descriptionText, Number(this.statusValue), Number(this.priorityValue), Number(this.severityValue));
+    this.issueService.postIssue(this.titleText, this.descriptionText, this.statusValue, this.priorityValue, this.severityValue);
   }
 
   getIssues(){
@@ -65,7 +65,7 @@ export class Issue {
   }
 
   updateIssue(){
-    this.issueService.updateIssueById(this.updateIdText, this.updateTitleText, this.updateDescriptionText, Number(this.updateStatusValue), Number(this.updatePriorityValue), Number(this.updateSeverityValue));
+    this.issueService.updateIssueById(this.updateIdText, this.updateTitleText, this.updateDescriptionText, this.updateStatusValue, this.updatePriorityValue, this.updateSeverityValue);
   }
 
 }

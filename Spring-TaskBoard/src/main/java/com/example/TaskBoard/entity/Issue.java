@@ -16,6 +16,10 @@ import java.util.UUID;
 @Table(name = "issues")
 public class Issue {
 
+    public enum IssueStatus {OPEN, IN_PROGRESS, RESOLVED, CLOSED};
+    public enum IssuePriority {LOW, MEDIUM, HIGH};
+    public enum IssueSeverity {LOW, MEDIUM, HIGH};
+
     @Id
     @Column(name = "issue_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,13 +32,14 @@ public class Issue {
     private String description;
 
     @Column(nullable = false)
-    private int status = 0;
+    @Enumerated
+    private IssueStatus status = IssueStatus.OPEN;
 
     @Column(nullable = false)
-    private int priority;
+    private IssuePriority priority;
 
     @Column(nullable = false)
-    private int severity;
+    private IssueSeverity severity;
 
     /*
     @Column()

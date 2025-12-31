@@ -2,7 +2,6 @@ package com.example.TaskBoard.service;
 
 import com.example.TaskBoard.entity.Issue;
 import com.example.TaskBoard.repository.IssueRepository;
-import com.fasterxml.jackson.core.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tools.jackson.databind.ObjectMapper;
@@ -15,8 +14,6 @@ import java.util.UUID;
 public class IssueService {
 
     private IssueRepository issueRepository;
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Autowired
     public IssueService(IssueRepository issueRepository){

@@ -35,13 +35,13 @@ export class IssueService {
     })
   }
 
-  postIssue(issueTitle: string, issueDescription: string, issueStatus: number, issuePriority: number, issueSeverity: number){
+  postIssue(issueTitle: string, issueDescription: string, issueStatus: string, issuePriority: string, issueSeverity: string){
     const body = {
       "title":issueTitle,
       "description":issueDescription,
-      "status": issueStatus,
-      "priority": issuePriority,
-      "severity": issueSeverity
+      "status": issueStatus.replace(/ /g, '_').toUpperCase(),
+      "priority": issuePriority.toUpperCase(),
+      "severity": issueSeverity.toUpperCase()
   }
     this.httpClient.post<IssueData>(`http://localhost:8080/issues`, body)
     .subscribe({
@@ -66,15 +66,15 @@ export class IssueService {
     })
   }
 
-  updateIssueById(issueId: string, issueTitle: string, issueDescription: string, issueStatus: number, issuePriority: number, issueSeverity: number){
+  updateIssueById(issueId: string, issueTitle: string, issueDescription: string, issueStatus: string, issuePriority: string, issueSeverity: string){
     const body = {
       "title":issueTitle,
       "description":issueDescription,
-      "status": issueStatus,
-      "priority": issuePriority,
-      "severity": issueSeverity
+      "status": issueStatus.replace(/ /g, '_').toUpperCase(),
+      "priority": issuePriority.toUpperCase(),
+      "severity": issueSeverity.toUpperCase()
   }
-    this.httpClient.post(`http://localhost:8080/issues/${issueId}`, body)
+    this.httpClient.put(`http://localhost:8080/issues/${issueId}`, body)
     .subscribe({
       next: responseData => {
         console.log(responseData);
