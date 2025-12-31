@@ -3,6 +3,7 @@ package com.example.TaskBoard.service;
 import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.ProjectRepository;
+import com.example.TaskBoard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,7 @@ import java.util.UUID;
 public class ProjectService {
 
     private final ProjectRepository projectRepository;
+    private final UserRepository userRepository;
 
     // GET /projects - List all projects
     public List<Project> getAllProjects() {
@@ -28,11 +30,17 @@ public class ProjectService {
 
     // POST /projects - Create project (Admin only)
     public Project createProject(Project project) {
+        User owner = userRepository.findUserByEmail(project.getOwner().getEmail())
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
+        project.setOwner(owner);
         return projectRepository.save(project);
     }
 
     // PUT /projects/{id} - Update project (Admin only)
     public Project updateProject(Project project) {
+        User owner = userRepository.findUserByEmail(project.getOwner().getEmail())
+                .orElseThrow(() -> new RuntimeException("Owner not found"));
+        project.setOwner(owner);
         return projectRepository.save(project);
     }
 
