@@ -1,0 +1,53 @@
+<div class="container">
+    <h1>Project API Testing Page</h1>
+
+    <div>
+        <h2>Create Project</h2>
+        <input type="text" placeholder="Project Name" [(ngModel)]="nameText">
+        <br>
+        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
+        <br>
+        <input type="text" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
+        <br>
+        <br>
+        <button (click)="postProject()">Submit</button>
+    </div>
+
+    <div>
+        <h2>Fetch Project by ID</h2>
+        <input type="text" placeholder="Project ID" [(ngModel)]="idValue">
+        <button (click)="getProjectById()">Submit</button>
+        <h2>{{ projectId() }}</h2>
+    </div>
+
+    <div>
+        <h2>Fetch ALL projects</h2>
+        <button (click)="getProjects()">Fetch Projects</button>
+    </div>
+
+    <div>
+        <h2>Fetch Projects by Owner Email</h2>
+        <input type="text" placeholder="Owner Email" [(ngModel)]="ownerEmailSearch">
+        <button (click)="getProjectsByOwnerEmail()">Submit</button>
+    </div>
+
+    <div>
+        <h2>Project to delete</h2>
+        <input type="text" placeholder="Project ID" [(ngModel)]="idValue">
+        <button (click)="deleteProjectById()">Submit</button>
+        <h2>{{ projectDeleteId() }}</h2>
+    </div>
+
+    <div>
+        <h2>Project to Update</h2>
+        <input type="text" placeholder="Project ID" [(ngModel)]="updateIdText">
+        <br>
+        <input type="text" placeholder="Project Name" [(ngModel)]="updateNameText">
+        <br>
+        <textarea placeholder="Description" rows="10" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
+        <br>
+        <input type="text" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
+        <br>
+        <button (click)="updateProjectById()">Submit</button>
+    </div>
+</div>
