@@ -4,17 +4,17 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class JwtStorage {
-  private token = '';
+  private TOKEN_KEY = 'TASK_MANAGER_TOKEN';
 
-  setToken(jwt : string){
-    this.token = jwt;
+  setToken(jwt: string){
+    localStorage.setItem(this.TOKEN_KEY, jwt);
   }
 
   getToken(){
-    return this.token;
+    return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  removeToken(){
-    this.token = '';
+  clearToken(){
+    localStorage.removeItem(this.TOKEN_KEY);
   }
 }
