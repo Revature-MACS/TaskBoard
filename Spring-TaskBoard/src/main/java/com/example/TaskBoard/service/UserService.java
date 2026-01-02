@@ -1,7 +1,9 @@
 package com.example.TaskBoard.service;
 
+import com.example.TaskBoard.dto.Token;
 import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.UserRepository;
+import com.example.TaskBoard.util.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepo;
+    private final TokenUtility tokenUtility;
 
     // A helper function that enforces basic table constraints
     private void validateUserInfo(User userInfo) throws SQLException, IllegalArgumentException{
@@ -93,7 +96,7 @@ public class UserService {
 
 
     // GET /users/login
-    public Optional<User> attemptToLogin(User userInfo) {
+    public Token attemptToLogin(User userInfo) {
         /*
         This queries the database for user information that match the provided
         email and password. If the query does not return anything, the email-password
@@ -102,7 +105,14 @@ public class UserService {
         For now, it returns the user information, if any exist.
         */
 
-        return userRepo.findUserByEmailAndPassword(userInfo.getEmail(),
+        Optional<User> loginAttempt = userRepo.findUserByEmailAndPassword(userInfo.getEmail(),
                 userInfo.getPassword());
+
+        if(loginAttempt.isPresent()){
+            User user = loginAttempt.get();
+            return new Token(tokenUtility.generateLoginToken(user.getUserID(), user.getRole()));
+        }
+
+        return null;
     }
 }
