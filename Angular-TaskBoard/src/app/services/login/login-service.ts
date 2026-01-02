@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { LoginInfo } from '../../interfaces/login-info';
+import { JwtStorage } from '../jwt/jwt-storage';
+import { TokenTransport } from '../../interfaces/token-transport';
+import { Router } from '@angular/router';
 
 
 
@@ -10,7 +13,7 @@ import { LoginInfo } from '../../interfaces/login-info';
 export class LoginService {
   API_URL : string = "http://localhost:8080/users";
 
-  constructor(private httpClient : HttpClient){
+  constructor(private httpClient : HttpClient, private jwtStorage: JwtStorage, private router: Router){
 
   }
 
@@ -20,10 +23,23 @@ export class LoginService {
       "password": password,
     };
 
-    this.httpClient.post<LoginInfo>(this.API_URL + `/login`, body)
-      .subscribe({
-        next: responseData =>{
-          console.log(responseData);
+    this.httpClient.post<TokenTransport>(
+      "http://localhost:8080/users/login",
+      {
+        "email": email,
+        "password": password
+      },
+      {
+        observe:"response"
+      }
+    ).subscribe({
+        next: response =>{
+          console.log(response.status);
+          if(response.body){
+            console.log(response.body.token)
+            this.jwtStorage.setToken(response.body.token);
+            this.router.navigate(['/issue'])
+          }
         },
         error: err =>{
           console.log(err);

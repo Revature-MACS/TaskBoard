@@ -23,9 +23,13 @@ public class IssueController {
 
     // POST - create Issue
     @PostMapping("/issues")
-    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue){
-        Issue createdIssue = issueService.createIssue(issue);
-        return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+    public ResponseEntity<Issue> createIssue(@RequestBody Issue issue, @RequestHeader String authorization){
+        Issue createdIssue = issueService.createIssue(issue, authorization);
+        if(createdIssue != null){
+            return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+        }
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+
     }
 
     // GET - Get Issue by ID

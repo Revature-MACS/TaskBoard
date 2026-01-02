@@ -1,17 +1,21 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IssueData } from '../interfaces/issue-data';
+import { JwtStorage } from './jwt/jwt-storage';
 
 @Injectable({
   providedIn: 'root',
 })
 export class IssueService {
 
-  constructor(private httpClient: HttpClient){
+  constructor(private httpClient: HttpClient, private jwtStorage: JwtStorage){
 
   }
 
   getIssues(){
+
+    let headers = new HttpHeaders();
+
     this.httpClient.get<IssueData>("http://localhost:8080/issues")
     .subscribe({
       next: responseData => {
@@ -42,8 +46,10 @@ export class IssueService {
       "status": issueStatus.replace(/ /g, '_').toUpperCase(),
       "priority": issuePriority.toUpperCase(),
       "severity": issueSeverity.toUpperCase()
-  }
-    this.httpClient.post<IssueData>(`http://localhost:8080/issues`, body)
+    }
+    let headers = new HttpHeaders();
+    headers = headers.set('Authorization', `Bearer ${this.jwtStorage.getToken()}`);
+    this.httpClient.post<IssueData>(`http://localhost:8080/issues`, body, {headers: headers})
     .subscribe({
       next: responseData =>{
         console.log(responseData)
