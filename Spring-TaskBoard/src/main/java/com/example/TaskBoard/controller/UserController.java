@@ -1,5 +1,6 @@
 package com.example.TaskBoard.controller;
 
+import com.example.TaskBoard.dto.Token;
 import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.ProjectUser;
 import com.example.TaskBoard.entity.User;
@@ -80,11 +81,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<User> attemptUserLogin(@RequestBody User userInfo){
-        Optional<User> userAccount = userService.attemptToLogin(userInfo);
+    public ResponseEntity<Token> attemptUserLogin(@RequestBody User userInfo){
+        Token userAccount = userService.attemptToLogin(userInfo);
 
-        if(userAccount.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(userAccount.get());
+        if(userAccount != null){
+            return ResponseEntity.status(HttpStatus.OK).body(userAccount);
         }
         else{
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
