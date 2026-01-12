@@ -2,6 +2,7 @@ package com.example.TaskBoard.api.project;
 
 import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.User;
+import com.example.TaskBoard.repository.ProjectRepository;
 import com.example.TaskBoard.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -22,6 +23,9 @@ public class ProjectApiTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ProjectRepository projectRepository;
+
     @BeforeAll
     public static void setup() {
         RestAssured.baseURI = "http://localhost";
@@ -31,6 +35,8 @@ public class ProjectApiTest {
     @BeforeEach
     public void testSetup() {
         RestAssured.basePath = "/projects";
+
+        projectRepository.deleteAll();
 
         if (userRepository.findUserByEmail("admin@taskboard.com").isEmpty()) {
             User admin = new User();
@@ -62,13 +68,36 @@ public class ProjectApiTest {
     @Test
     public void getAllProjectsPositiveTest() {
         String token = getAuthToken();
+        User owner = userRepository.findUserByEmail("admin@taskboard.com").get();
+
+        Project project = new Project();
+        project.setName("Existing Project");
+        project.setOwner(owner);
+        projectRepository.save(project);
 
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
                 .get()
                 .then()
-                .statusCode(200);
+                .statusCode(200)
+                .body("$", notNullValue())
+                .body("size()", is(1))
+                .body("[0].name", notNullValue())
+                .body("[0].projectId", notNullValue());
+    }
+
+    @Test
+    public void getAllProjectsEmptyTest() {
+        String token = getAuthToken();
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get()
+                .then()
+                .statusCode(200)
+                .body("$", notNullValue())
+                .body("size()", is(0));
     }
 
     @Test
@@ -83,9 +112,6 @@ public class ProjectApiTest {
         project.setDescription("Test project description");
         project.setOwner(owner);
 
-        /*
-         * Act & Assert: Create the project and verify the response
-         */
         given()
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
@@ -93,7 +119,6 @@ public class ProjectApiTest {
                 .when()
                 .post()
                 .then()
-                // Verify the response status code and data
                 .statusCode(201)
                 .body("name", equalTo(projectName))
                 .body("projectId", notNullValue());
