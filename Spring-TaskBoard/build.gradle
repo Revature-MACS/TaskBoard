@@ -32,10 +32,15 @@ dependencies {
 	// make sure rest assured is before any junit dependencies, per the documentation
 	testImplementation 'io.rest-assured:rest-assured:6.0.0'
 
+    // Spring wants this in-memory database for repository tests, so we include it
+    // https://mvnrepository.com/artifact/com.h2database/h2
+    testImplementation 'com.h2database:h2:2.4.240'
 	// https://mvnrepository.com/artifact/io.cucumber/cucumber-java
 	testImplementation 'io.cucumber:cucumber-java:7.33.0'
 	// https://mvnrepository.com/artifact/io.cucumber/cucumber-junit-platform-engine
 	testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.33.0'
+	// https://mvnrepository.com/artifact/io.cucumber/cucumber-spring
+	implementation 'io.cucumber:cucumber-spring:7.33.0'
 	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.14.0'
 	// https://mvnrepository.com/artifact/org.junit.platform/junit-platform-suite
