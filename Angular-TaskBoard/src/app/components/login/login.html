@@ -5,15 +5,15 @@
 
     <div>
     <h2>Email</h2>
-    <input type="text" placeholder="Email" [(ngModel)]="email"/>
+    <input type="text" id="email" placeholder="Email" [(ngModel)]="email"/>
 
     <h2>Password</h2>
-    <input type="password" placeholder="Password" [(ngModel)]="password"/>
+    <input type="password" id="password" placeholder="Password" [(ngModel)]="password"/>
     </div>
 
 
     <br><br>
-    <button (click)="attemptLogin()">Login</button>
+    <button id="loginButton" (click)="attemptLogin()">Login</button>
   </div>
 
 
