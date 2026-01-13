@@ -25,7 +25,7 @@ public class Issue {
     private UUID issueId;
 
     @Column(nullable = false)
-    private String  title;
+    private String title;
 
     @Column(nullable = false)
     private String description;
