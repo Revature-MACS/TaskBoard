@@ -46,9 +46,18 @@ public class IssueApiTest {
             tester.setRole(User.UserRole.TESTER);
             userRepository.save(tester);
         }
+
+        if (userRepository.findUserByEmail("developer@taskboard.com").isEmpty()) {
+            User developer = new User();
+            developer.setName("Developer User");
+            developer.setEmail("developer@taskboard.com");
+            developer.setPassword("developer123");
+            developer.setRole(User.UserRole.DEVELOPER);
+            userRepository.save(developer);
+        }
     }
 
-    private String getAuthToken() {
+    private String getTesterAuthToken() {
         User credentials = new User();
         credentials.setEmail("tester@taskboard.com");
         credentials.setPassword("tester123");
@@ -65,9 +74,26 @@ public class IssueApiTest {
                 .path("token");
     }
 
+    private String getDeveloperAuthToken() {
+        User credentials = new User();
+        credentials.setEmail("developer@taskboard.com");
+        credentials.setPassword("developer123");
+
+        return given()
+                .basePath("/users/login")
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("token");
+    }
+
     @Test
     public void getAllIssuesPositiveTest() {
-        String token = getAuthToken();
+        String token = getTesterAuthToken();
         User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
         UUID projectId = UUID.randomUUID();
 
@@ -96,7 +122,7 @@ public class IssueApiTest {
 
     @Test
     public void getAllIssuesEmptyTest() {
-        String token = getAuthToken();
+        String token = getTesterAuthToken();
         given()
                 .header("Authorization", "Bearer " + token)
                 .when()
@@ -108,8 +134,52 @@ public class IssueApiTest {
     }
 
     @Test
+    public void getIssueByIdPositiveTest() {
+        String token = getTesterAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setProjectId(UUID.randomUUID());
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+        Issue resultIssue = issueRepository.save(issue);
+
+        given()
+                .pathParam("issueId", resultIssue.getIssueId())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/{issueId}")
+                .then()
+                .statusCode(200)
+                .body("title", equalTo(resultIssue.getTitle()))
+                .body("issueId", equalTo(resultIssue.getIssueId().toString()))
+                .body("projectId", notNullValue());
+    }
+
+    @Test
+    public void getIssueByIdNegativeTestInvalidId() {
+        String token = getTesterAuthToken();
+
+        given()
+                .pathParam("issueId", UUID.randomUUID().toString())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/{issueId}")
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
     public void createIssuePositiveTest() {
-        String token = getAuthToken();
+        String token = getTesterAuthToken();
 
         String issueTitle = "New Issue " + UUID.randomUUID();
         User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
@@ -135,5 +205,158 @@ public class IssueApiTest {
                 .body("projectId", notNullValue());
     }
 
+    @Test
+    public void createIssueNegativeTestInvalidData() {
+        String token = getTesterAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(issue)
+                .when()
+                .post()
+                .then()
+                .statusCode(400);
+    }
+
+    @Test
+    public void createIssueNegativeTestInvalidAuthorization() {
+        String token = getDeveloperAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("developer@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setProjectId(UUID.randomUUID());
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(issue)
+                .when()
+                .post()
+                .then()
+                .statusCode(401);
+    }
+
+    @Test
+    public void deleteIssuePositiveTest() {
+        String token = getTesterAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setProjectId(UUID.randomUUID());
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+        Issue resultIssue = issueRepository.save(issue);
+
+        given()
+                .pathParam("issueId", resultIssue.getIssueId())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .when()
+                .delete("/{issueId}")
+                .then()
+                .statusCode(204);
+    }
+
+    @Test
+    public void deleteIssueNegativeTestInvalidId() {
+        String token = getTesterAuthToken();
+
+        given()
+                .pathParam("issueId", UUID.randomUUID().toString())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .when()
+                .delete("/{issueId}")
+                .then()
+                .statusCode(404);
+    }
+
+    @Test
+    public void updateIssuePositiveTest() {
+        String token = getTesterAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setProjectId(UUID.randomUUID());
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+        Issue resultIssue = issueRepository.save(issue);
+        issue.setTitle("Updated Title");
+        issue.setDescription("Updated Description");
+
+        given()
+                .pathParam("issueId", resultIssue.getIssueId())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(issue)
+                .when()
+                .put("/{issueId}")
+                .then()
+                .statusCode(200)
+                .body("title", equalTo(issue.getTitle()))
+                .body("issueId", equalTo(resultIssue.getIssueId().toString()))
+                .body("description", equalTo(issue.getDescription()))
+                .body("projectId", notNullValue());
+    }
+
+    @Test
+    public void updateIssueNegativeTestInvalidId() {
+        String token = getTesterAuthToken();
+
+        String issueTitle = "New Issue " + UUID.randomUUID();
+        User owner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Issue issue = new Issue();
+        issue.setProjectId(UUID.randomUUID());
+        issue.setOwner(owner);
+        issue.setTitle(issueTitle);
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+        Issue resultIssue = issueRepository.save(issue);
+
+        given()
+                .pathParam("issueId", UUID.randomUUID().toString())
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(issue)
+                .when()
+                .put("/{issueId}")
+                .then()
+                .statusCode(404);
+    }
 
 }
