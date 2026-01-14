@@ -1,9 +1,9 @@
 <div class="container">
-    <h1>Dashboard</h1>
+    <h1 id="dashboardTitle">Dashboard</h1>
 
     <div>
         <h2>All Projects</h2>
-        <button (click)="loadProjects()">Load Projects</button>
+        <button id="loadProjectsButton" (click)="loadProjects()">Load Projects</button>
 
         <div *ngIf="successMessage()" class="success-message">
             {{ successMessage() }}
@@ -21,12 +21,14 @@
                 <p><strong>Description:</strong> {{ project.description || 'No description' }}</p>
                 <p><strong>Owner:</strong> {{ project.owner.email }}</p>
                 <p><strong>Assigned To:</strong>
-                    <span *ngIf="assignedUsersMap()[project.projectId] && assignedUsersMap()[project.projectId].length > 0">
+                    <span
+                        *ngIf="assignedUsersMap()[project.projectId] && assignedUsersMap()[project.projectId].length > 0">
                         <span *ngFor="let user of assignedUsersMap()[project.projectId]; let last = last">
                             {{ user.name }} ({{ user.role }})<span *ngIf="!last">, </span>
                         </span>
                     </span>
-                    <span *ngIf="!assignedUsersMap()[project.projectId] || assignedUsersMap()[project.projectId].length === 0">
+                    <span
+                        *ngIf="!assignedUsersMap()[project.projectId] || assignedUsersMap()[project.projectId].length === 0">
                         No users assigned
                     </span>
                 </p>

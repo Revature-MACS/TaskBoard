@@ -15,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 
+import java.util.Map;
+import java.util.UUID;
+
 public class ProjectSteps {
 
     @Autowired
@@ -22,7 +25,6 @@ public class ProjectSteps {
 
     @Autowired
     private ProjectRepository projectRepository;
-
     private String token;
     private Response response;
 
@@ -30,30 +32,35 @@ public class ProjectSteps {
     public void a_user_is_logged_in_as_an_admin() {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
+        User admin = new User();
 
         // Ensure admin user exists
         if (userRepository.findUserByEmail("admin@taskboard.com").isEmpty()) {
-            User admin = new User();
             admin.setName("Admin User");
             admin.setEmail("admin@taskboard.com");
             admin.setPassword("admin123");
             admin.setRole(User.UserRole.ADMIN);
             userRepository.save(admin);
+        } else {
+            admin = userRepository.findUserByEmail("admin@taskboard.com").get();
         }
 
         // Ensure at least one project exists for this admin
         if (projectRepository.findByOwner_Email("admin@taskboard.com").isEmpty()) {
-            User admin = userRepository.findUserByEmail("admin@taskboard.com").get();
             Project project = new Project();
+            project.setProjectId(UUID.randomUUID());
             project.setName("Integration Test Project");
             project.setDescription("A project for E2E testing");
             project.setOwner(admin);
             projectRepository.save(project);
         }
 
+        Map<String, String> credentials = Map.of("email", admin.getEmail(), "password", admin.getPassword());
+
+        // Login to get token
         token = given()
                 .contentType(ContentType.JSON)
-                .body("{\"email\":\"admin@taskboard.com\", \"password\":\"admin123\"}")
+                .body(credentials)
                 .when()
                 .post("/users/login")
                 .then()

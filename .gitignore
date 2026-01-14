@@ -1,4 +1,5 @@
 Spring-TaskBoard/.idea/*
 
-# Keep local application.properties changes (profile settings, etc.)
-Spring-TaskBoard/src/main/resources/application.properties
+# IDE and Build files
+Spring-TaskBoard/.vscode/settings.json
+Spring-TaskBoard/gradlew
