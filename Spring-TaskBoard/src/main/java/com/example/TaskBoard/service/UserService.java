@@ -36,6 +36,10 @@ public class UserService {
             throw new IllegalArgumentException("The password field must not be empty!");
         }
 
+        if(userInfo.getEmail().isEmpty()){
+            throw new IllegalArgumentException("The email field must not be empty!");
+        }
+
         // If the userInfo didn't trigger any exceptions, then it must be valid.
     }
 
