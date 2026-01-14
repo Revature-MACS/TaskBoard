@@ -11,8 +11,8 @@ import com.example.TaskBoard.util.TokenUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,9 +42,10 @@ public class UserApiTest {
         RestAssured.baseURI = "http://localhost";
         RestAssured.port = 8080;
         RestAssured.basePath = "/users";
+        
     }
 
-    @AfterEach
+    @BeforeEach
     public void resetDatabase(){
         userRepository.deleteAll();
     }

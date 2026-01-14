@@ -208,7 +208,6 @@ public class ProjectServiceUnitTest {
         mockProject.setOwner(admin);
         mockProject.setName("Mock Project");
 
-        when(projectRepository.existsById(projectId)).thenReturn(true);
         when(projectRepository.findById(projectId)).thenReturn(Optional.of(mockProject));
 
         projectService.deleteProject(projectId);
@@ -222,8 +221,6 @@ public class ProjectServiceUnitTest {
     @Test
     void deleteProjectNegativeTest_ProjectNotFound() {
         UUID projectId = UUID.randomUUID();
-
-        when(projectRepository.existsById(projectId)).thenReturn(false);
 
         RuntimeException exception = org.junit.jupiter.api.Assertions.assertThrows(RuntimeException.class, () -> {
             projectService.deleteProject(projectId);
