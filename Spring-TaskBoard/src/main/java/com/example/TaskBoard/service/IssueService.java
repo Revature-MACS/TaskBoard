@@ -8,6 +8,7 @@ import com.example.TaskBoard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,27 +29,34 @@ public class IssueService {
         this.userRepository = userRepository;
     }
 
-    public Issue createIssue(Issue issue, String headerData){
+    public Issue createIssue(Issue issue, String headerData) throws SQLException {
         if(authService.getAuthLevel(headerData).equals(User.UserRole.TESTER)){
             User owner = userRepository.findUserByEmail(issue.getOwner().getEmail())
                     .orElseThrow(() -> new RuntimeException("Owners not Found"));
 
-            issue.setOwner(owner);
-            Issue savedIssue = issueRepository.save(issue);
+            try {
+                issue.setOwner(owner);
+                Issue savedIssue = issueRepository.save(issue);
 
-            // Audit log
-            auditLogService.logIssueAction(
-                    savedIssue.getIssueId().toString(),
-                    AuditLog.ActionType.CREATE,
-                    owner.getEmail(),
-                    "Created project: " + savedIssue.getTitle()
-            );
-            return savedIssue;
+                // Audit log
+                auditLogService.logIssueAction(
+                        savedIssue.getIssueId().toString(),
+                        AuditLog.ActionType.CREATE,
+                        owner.getEmail(),
+                        "Created project: " + savedIssue.getTitle()
+                );
+                return savedIssue;
+            } catch (Exception e) {
+                throw new SQLException("Cant have Null Value");
+            }
         }
         else {
             return null;
         }
+
     }
+
+
 
     public void deleteIssue(UUID issueId){
         Optional<Issue> issue = issueRepository.findById(issueId);
@@ -108,7 +116,7 @@ public class IssueService {
             issue.setProjectId(previousIssue.getProjectId());
         }
         else {
-            throw new RuntimeException("Issue not found with ID" + issue.getIssueId());
+            return null;
         }
 
         // If we change the status
