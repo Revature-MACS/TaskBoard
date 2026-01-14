@@ -6,6 +6,7 @@ import com.example.TaskBoard.repository.UserRepository;
 import com.example.TaskBoard.util.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -98,6 +99,7 @@ public class UserService {
     DELETE /users/{email} - Deletes a User's account.
     Admins can delete any account, but Testers and Developers can only delete their account
     */
+    @Transactional
     public void deleteUser(String email){
         userRepo.deleteUserByEmail(email);
     }

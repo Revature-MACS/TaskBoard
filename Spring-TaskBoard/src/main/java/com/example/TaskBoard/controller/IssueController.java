@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,9 +26,15 @@ public class IssueController {
     // POST - create Issue
     @PostMapping("/issues")
     public ResponseEntity<Issue> createIssue(@RequestBody Issue issue, @RequestHeader String authorization){
-        Issue createdIssue = issueService.createIssue(issue, authorization);
-        if(createdIssue != null){
-            return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+        try
+        {
+            Issue createdIssue = issueService.createIssue(issue, authorization);
+            if(createdIssue != null){
+                return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+            }
+        } catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
