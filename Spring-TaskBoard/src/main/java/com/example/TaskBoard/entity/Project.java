@@ -30,11 +30,11 @@ public class Project {
 
     @JsonIgnore
     @Column(name = "created_at", nullable = false, updatable = false)
-    private long timeCreatedAtEpoch;
+    private Long timeCreatedAtEpoch;
 
     @JsonIgnore
     @Column(name = "updated_at")
-    private long timeUpdatedAtEpoch;
+    private Long timeUpdatedAtEpoch;
 
     @PrePersist
     protected void onCreate() {
