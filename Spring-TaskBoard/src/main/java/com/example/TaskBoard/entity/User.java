@@ -32,4 +32,18 @@ public class User {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserRole role;
+
+    public static UserRole matchStringToUserRole(String str){
+        if(str == null){
+            return null;
+        }
+
+        for(UserRole role : UserRole.values()){
+            if(str.equalsIgnoreCase(role.toString())){
+                return role;
+            }
+        }
+
+        return null;
+    }
 }
