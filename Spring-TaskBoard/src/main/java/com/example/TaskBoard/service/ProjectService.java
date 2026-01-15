@@ -6,7 +6,10 @@ import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.ProjectRepository;
 import com.example.TaskBoard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -96,7 +99,7 @@ public class ProjectService {
     public void deleteProject(UUID projectId) {
         Optional<Project> project = projectRepository.findById(projectId);
         if (!project.isPresent()) {
-            throw new RuntimeException("Project not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
         }
         String projectName = project.map(Project::getName).orElse("Unknown");
         String ownerEmail = project.map(p -> p.getOwner().getEmail()).orElse("Unknown");

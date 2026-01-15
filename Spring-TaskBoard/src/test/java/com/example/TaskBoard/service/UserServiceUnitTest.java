@@ -167,12 +167,13 @@ public class UserServiceUnitTest {
         User invalidUser = new User();
         invalidUser.setName("");
         invalidUser.setPassword("");
+        invalidUser.setEmail(EMAIL);
 
         when(userRepository.findUserByEmail(EMAIL)).thenReturn(Optional.empty());
 
         // First check for invalid name
         Exception exception = assertThrows(IllegalArgumentException.class,
-                () -> userService.updateUser("invalid@email.com", invalidUser));
+                () -> userService.updateUser(EMAIL, invalidUser));
         assertEquals("The name field must not be empty!", exception.getMessage());
         invalidUser.setName("Test User");
 

@@ -123,4 +123,64 @@ public class ProjectApiTest {
                 .body("name", equalTo(projectName))
                 .body("projectId", notNullValue());
     }
+
+    @Test
+    public void updateProjectPositiveTest() {
+        String token = getAuthToken();
+        User owner = userRepository.findUserByEmail("admin@taskboard.com").get();
+
+        Project project = new Project();
+        project.setName("P1");
+        project.setDescription("P1 Description");
+        project.setOwner(owner);
+        projectRepository.save(project);
+
+        project.setName("Updated P1");
+        project.setDescription("Updated P1 Description");
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .contentType(ContentType.JSON)
+                .body(project)
+                .when()
+                .put("/{id}", project.getProjectId())
+                .then()
+                .statusCode(200)
+                .body("name", equalTo("Updated P1"))
+                .body("description", equalTo("Updated P1 Description"));
+    }
+
+    @Test
+    public void deleteProjectPositiveTest() {
+        String token = getAuthToken();
+        User owner = userRepository.findUserByEmail("admin@taskboard.com").get();
+
+        Project project = new Project();
+        project.setName("P1 Delete");
+        project.setOwner(owner);
+        projectRepository.save(project);
+
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete("/{id}", project.getProjectId())
+                .then()
+                .statusCode(204);
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .get("/{id}", project.getProjectId())
+                .then()
+                .statusCode(404);
+    }
+    @Test
+    public void deleteProjectNegativeTest() {
+        String token = getAuthToken();
+        given()
+                .header("Authorization", "Bearer " + token)
+                .when()
+                .delete("/{id}", UUID.randomUUID())
+                .then()
+                .statusCode(404);
+    }
 }
