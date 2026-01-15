@@ -56,9 +56,7 @@ public class IssueService {
 
     }
 
-
-
-    public void deleteIssue(UUID issueId){
+    public void deleteIssue(UUID issueId) {
         Optional<Issue> issue = issueRepository.findById(issueId);
         String issueName = issue.map(Issue::getTitle).orElse("Unknown");
         String ownerEmail = issue.map(i -> i.getOwner().getEmail()).orElse("Unknown");
@@ -85,16 +83,6 @@ public class IssueService {
 
     public List<Issue> getIssuesByProject(UUID projectId) {
         return issueRepository.findByProjectId(projectId);
-    }
-
-    public List<Issue> searchIssues(String keyword) {
-        return issueRepository.searchByKeyword(keyword);
-    }
-
-    public List<Issue> filterIssues(UUID projectId, Issue.IssueStatus status,
-                                     Issue.IssueSeverity severity, Issue.IssuePriority priority,
-                                     String keyword) {
-        return issueRepository.findByFilters(projectId, status, severity, priority, keyword);
     }
 
     public List<AuditLog> getIssueHistory(UUID issueId) {
@@ -168,16 +156,4 @@ public class IssueService {
         );
         return issueRepository.save(issue);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }
