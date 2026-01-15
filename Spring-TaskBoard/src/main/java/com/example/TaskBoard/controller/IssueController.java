@@ -91,24 +91,6 @@ public class IssueController {
         return ResponseEntity.ok(issues);
     }
 
-    @GetMapping("/issues/search")
-    public ResponseEntity<List<Issue>> searchIssues(@RequestParam String keyword) {
-        List<Issue> issues = issueService.searchIssues(keyword);
-        return ResponseEntity.ok(issues);
-    }
-
-    @GetMapping("/issues/filter")
-    public ResponseEntity<List<Issue>> filterIssues(
-            @RequestParam(required = false) String projectId,
-            @RequestParam(required = false) Issue.IssueStatus status,
-            @RequestParam(required = false) Issue.IssueSeverity severity,
-            @RequestParam(required = false) Issue.IssuePriority priority,
-            @RequestParam(required = false) String keyword) {
-        UUID projectUUID = projectId != null ? UUID.fromString(projectId) : null;
-        List<Issue> issues = issueService.filterIssues(projectUUID, status, severity, priority, keyword);
-        return ResponseEntity.ok(issues);
-    }
-
     @GetMapping("/issues/{issueId}/history")
     public ResponseEntity<List<AuditLog>> getIssueHistory(@PathVariable String issueId) {
         UUID issueUUID = UUID.fromString(issueId);

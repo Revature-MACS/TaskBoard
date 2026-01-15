@@ -1,5 +1,6 @@
 package com.example.TaskBoard.service;
 
+import com.example.TaskBoard.entity.AuditLog;
 import com.example.TaskBoard.entity.Issue;
 import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.User;
@@ -23,7 +24,8 @@ import java.util.UUID;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IssueServiceUnitTest {
@@ -151,5 +153,204 @@ public class IssueServiceUnitTest {
         assertNotNull(result);
         assertEquals(mockIssue.getIssueId(), result.getIssueId());
         assertEquals(mockIssue.getIssueId(), result.getIssueId());
+    }
+
+    @Test
+    void createIssueNegativeTest() throws SQLException {
+        Issue issue = new Issue();
+        User owner = new User();
+        owner.setEmail("developer@example.com");
+        issue.setOwner(owner);
+
+        when(authService.getAuthLevel("header")).thenReturn(User.UserRole.DEVELOPER); // NOT TESTER
+
+        Issue result = issueService.createIssue(issue, "header");
+
+        assertNull(result);
+    }
+
+    @Test
+    void deleteIssuePositiveTest() {
+            User owner = new User();
+            owner.setEmail("tester@example.com");
+            Issue mockIssue = new Issue();
+            mockIssue.setOwner(owner);
+            mockIssue.setIssueId(UUID.randomUUID());
+            mockIssue.setProjectId(UUID.randomUUID());
+            mockIssue.setTitle("Issue 1");
+            mockIssue.setDescription("Issue 1 Description");
+            mockIssue.setStatus(Issue.IssueStatus.OPEN);
+            mockIssue.setSeverity(Issue.IssueSeverity.LOW);
+            mockIssue.setPriority(Issue.IssuePriority.LOW);
+
+            when(issueRepository.findById(mockIssue.getIssueId())).thenReturn(Optional.of(mockIssue));
+
+            issueService.deleteIssue(mockIssue.getIssueId());
+
+            verify(auditLogService).logIssueAction(mockIssue.getIssueId().toString(),
+                    AuditLog.ActionType.DELETE,
+                    owner.getEmail(),
+                    "Deleted Issue: " + mockIssue.getTitle());
+    }
+
+    @Test
+    void deleteIssueNegativeTest_IssueNotFound() {
+            UUID issueId = UUID.randomUUID();
+
+            when(issueRepository.findById(issueId)).thenReturn(Optional.empty());
+
+            issueService.deleteIssue(issueId);
+
+            verify(issueRepository).deleteById(issueId);
+
+            verify(auditLogService).logIssueAction(
+                    issueId.toString(),
+                    AuditLog.ActionType.DELETE,
+                    "Unknown",
+                    "Deleted Issue: Unknown"
+            );
+    }
+
+    @Test
+    void getIssuesByProjectPositiveTets() {
+            List<Issue> mockIssues = new ArrayList<>();
+            UUID projectId = UUID.randomUUID();
+            User owner = new User();
+            owner.setEmail("tester@example.com");
+
+            Issue mockIssue = new Issue();
+            mockIssue.setProjectId(projectId);
+            mockIssue.setIssueId(UUID.randomUUID());
+            mockIssue.setOwner(owner);
+            mockIssue.setTitle("Issue Title");
+            mockIssues.add(mockIssue);
+
+            Issue mockIssue2 = new Issue();
+            mockIssue2.setProjectId(projectId);
+            mockIssue2.setIssueId(UUID.randomUUID());
+            mockIssue2.setOwner(owner);
+            mockIssue2.setTitle("Issue Title 2");
+            mockIssues.add(mockIssue2);
+
+            when(issueRepository.findByProjectId(projectId)).thenReturn(mockIssues);
+
+            List<Issue> results = issueService.getIssuesByProject(projectId);
+
+            assertNotNull(results);
+            assertEquals(2, results.size());
+            assertEquals("Issue Title", results.get(0).getTitle());
+            assertEquals("Issue Title 2", results.get(1).getTitle());
+    }
+
+    @Test
+    void getIssuesByProjectEmptyTest() {
+        UUID projectId = UUID.randomUUID();
+        when(issueRepository.findByProjectId(projectId)).thenReturn(new ArrayList<>());
+
+        List<Issue> result = issueService.getIssuesByProject(projectId);
+
+        assertNotNull(result);
+        assertEquals(0, result.size());
+    }
+
+    @Test
+    void updateIssuePositiveTest() {
+        User owner = new User();
+        owner.setEmail("tester@example.com");
+        owner.setRole(User.UserRole.TESTER);
+
+        Issue mockIssue = new Issue();
+        UUID issueId = UUID.randomUUID();
+        mockIssue.setOwner(owner);
+        mockIssue.setIssueId(issueId);
+        mockIssue.setProjectId(UUID.randomUUID());
+        mockIssue.setTitle("Issue 1");
+        mockIssue.setDescription("Issue 1 Description");
+        mockIssue.setStatus(Issue.IssueStatus.OPEN);
+        mockIssue.setSeverity(Issue.IssueSeverity.LOW);
+        mockIssue.setPriority(Issue.IssuePriority.LOW);
+
+        when(authService.getAuthLevel("header")).thenReturn(User.UserRole.TESTER);
+        when(userRepository.findUserByEmail(owner.getEmail())).thenReturn(Optional.of(owner));
+        when(issueRepository.findById(issueId)).thenReturn(Optional.of(mockIssue));
+        when(issueRepository.save(mockIssue)).thenReturn(mockIssue);
+
+        Issue result = issueService.updateIssue(mockIssue, "header");
+
+        assertNotNull(result);
+        assertEquals(mockIssue.getIssueId(), result.getIssueId());
+        assertEquals(mockIssue.getTitle(), result.getTitle());
+    }
+
+    @Test
+    void updateIssueNegativeTest_InvalidAuthorization() {
+        UUID issueId = UUID.randomUUID();
+
+        User owner = new User();
+        owner.setEmail("tester@example.com");
+
+        Issue previousIssue = new Issue();
+        previousIssue.setIssueId(issueId);
+        previousIssue.setStatus(Issue.IssueStatus.OPEN);
+        previousIssue.setProjectId(UUID.randomUUID());
+
+        Issue updatedIssue = new Issue();
+        updatedIssue.setIssueId(issueId);
+        updatedIssue.setOwner(owner);
+        updatedIssue.setStatus(Issue.IssueStatus.IN_PROGRESS);
+
+        when(authService.getAuthLevel("header")).thenReturn(User.UserRole.TESTER);
+        when(userRepository.findUserByEmail(owner.getEmail())).thenReturn(Optional.of(owner));
+        when(issueRepository.findById(issueId)).thenReturn(Optional.of(previousIssue));
+
+        RuntimeException exception = assertThrows(RuntimeException.class,
+                () -> issueService.updateIssue(updatedIssue, "header")
+        );
+
+        assertEquals("Invalid Authorization", exception.getMessage());
+
+        verify(issueRepository, never()).save(any());
+        verify(auditLogService, never()).logIssueAction(any(), any(), any(), any());
+    }
+
+    @Test
+    void getIssueHistoryPositiveTest() {
+        UUID issueId = UUID.randomUUID();
+
+        AuditLog log = new AuditLog();
+        List<AuditLog> logs = List.of(log);
+
+        when(auditLogService.getAuditLogsForEntity(
+                AuditLog.EntityType.ISSUE,
+                issueId.toString()
+        )).thenReturn(logs);
+
+        List<AuditLog> result = issueService.getIssueHistory(issueId);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertSame(logs, result);
+    }
+
+    @Test
+    void getIssueHistoryEmptyTest() {
+        UUID issueId = UUID.randomUUID();
+
+        List<AuditLog> emptyLogs = new ArrayList<>();
+
+        when(auditLogService.getAuditLogsForEntity(
+                AuditLog.EntityType.ISSUE,
+                issueId.toString()
+        )).thenReturn(emptyLogs);
+
+        List<AuditLog> result = issueService.getIssueHistory(issueId);
+
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+
+        verify(auditLogService).getAuditLogsForEntity(
+                AuditLog.EntityType.ISSUE,
+                issueId.toString()
+        );
     }
 }
