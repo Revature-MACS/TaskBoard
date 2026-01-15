@@ -1,8 +1,10 @@
 package com.example.TaskBoard.api.issue;
 
 import com.example.TaskBoard.entity.Issue;
+import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.IssueRepository;
+import com.example.TaskBoard.repository.ProjectRepository;
 import com.example.TaskBoard.repository.UserRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -25,6 +27,9 @@ public class IssueApiTest {
 
     @Autowired
     private IssueRepository issueRepository;
+
+    @Autowired
+    private ProjectRepository projectRepository;
 
     @BeforeAll
     public static void setup() {
@@ -55,6 +60,15 @@ public class IssueApiTest {
             developer.setRole(User.UserRole.DEVELOPER);
             userRepository.save(developer);
         }
+
+        if (userRepository.findUserByEmail("admin@taskboard.com").isEmpty()) {
+            User admin = new User();
+            admin.setName("Admin User");
+            admin.setEmail("admin@taskboard.com");
+            admin.setPassword("admin123");
+            admin.setRole(User.UserRole.ADMIN);
+            userRepository.save(admin);
+        }
     }
 
     private String getTesterAuthToken() {
@@ -78,6 +92,23 @@ public class IssueApiTest {
         User credentials = new User();
         credentials.setEmail("developer@taskboard.com");
         credentials.setPassword("developer123");
+
+        return given()
+                .basePath("/users/login")
+                .contentType(ContentType.JSON)
+                .body(credentials)
+                .when()
+                .post()
+                .then()
+                .statusCode(200)
+                .extract()
+                .path("token");
+    }
+
+    private String getAdminAuthToken() {
+        User credentials = new User();
+        credentials.setEmail("admin@taskboard.com");
+        credentials.setPassword("admin123");
 
         return given()
                 .basePath("/users/login")
@@ -357,6 +388,68 @@ public class IssueApiTest {
                 .put("/{issueId}")
                 .then()
                 .statusCode(404);
+    }
+
+    @Test
+    public void getIssuesByProjectPositiveTest() {
+        String token = getTesterAuthToken();
+
+        User projectOwner = userRepository.findUserByEmail("admin@taskboard.com").get();
+        User issueOwner = userRepository.findUserByEmail("tester@taskboard.com").get();
+
+        Project project = new Project();
+        project.setName("Existing Project");
+        project.setOwner(projectOwner);
+        Project createdProject = projectRepository.save(project);
+
+
+        Issue issue = new Issue();
+        issue.setProjectId(createdProject.getProjectId());
+        issue.setOwner(issueOwner);
+        issue.setTitle("Test Issue Title");
+        issue.setDescription("Test Issue Description");
+        issue.setPriority(Issue.IssuePriority.LOW);
+        issue.setSeverity(Issue.IssueSeverity.LOW);
+        issue.setStatus(Issue.IssueStatus.OPEN);
+        issueRepository.save(issue);
+
+        given()
+                .basePath("")
+                .header("Authorization", "Bearer " + token)
+                .pathParam("projectId", createdProject.getProjectId().toString())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/projects/{projectId}/issues")
+                .then()
+                .statusCode(200)
+                .body("$", notNullValue())
+                .body("size()", is(1))
+                .body("[0].title", notNullValue())
+                .body("[0].issueId", notNullValue());
+    }
+
+    @Test
+    public void getIssuesByProjectEmptyTest() {
+        String token = getTesterAuthToken();
+
+        User projectOwner = userRepository.findUserByEmail("admin@taskboard.com").get();
+
+        Project project = new Project();
+        project.setName("Existing Project");
+        project.setOwner(projectOwner);
+        Project createdProject = projectRepository.save(project);
+
+        given()
+                .basePath("")
+                .header("Authorization", "Bearer " + token)
+                .pathParam("projectId", createdProject.getProjectId().toString())
+                .contentType(ContentType.JSON)
+                .when()
+                .get("/projects/{projectId}/issues")
+                .then()
+                .statusCode(200)
+                .body("$", notNullValue())
+                .body("size()", is(0));
     }
 
 }
