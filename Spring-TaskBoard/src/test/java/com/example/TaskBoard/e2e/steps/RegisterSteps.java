@@ -4,7 +4,9 @@ import com.example.TaskBoard.entity.User;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -47,6 +49,7 @@ public class RegisterSteps {
 
     @Then("The user is not redirected to the dashboard")
     public void the_user_is_not_redirected_to_the_dashboard() {
-        assertTrue(driver.getCurrentUrl().contains("register"));
+        assertFalse(driver.getCurrentUrl().contains("dashboard"));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("error-message")));
     }
 }
