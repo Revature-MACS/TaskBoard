@@ -25,3 +25,8 @@ Feature: User Registration
       | invalid1@email.com |      | Developer User | Developer  |
       | invalid2@email.com | password3 |           | Admin  |
       | invalid3@email.com | password4 | Test User |        |
+
+  Scenario: User can't register because account already exists
+    When  The user enters credentials "admin@taskboard.com", "password", "Admin User", and "Admin"
+    And   The user attempts to register
+    Then  The user is not redirected to the dashboard
