@@ -39,17 +39,11 @@ export class CreateIssue {
   severityValue: string = "Low";
   idValue: string = "";
   ownerEmailText: string = "";
-  projectId: string = "";
+  projectIdText: string = "";
 
   postIssue(){
-    this.issueTitle.set(this.titleText);
-    this.issueDescription.set(this.descriptionText);
-    this.issueStatus.set(this.statusValue);
-    this.issuePriority.set(this.priorityValue);
-    this.issueSeverity.set(this.severityValue);
-    this.issueProjectId.set(this.projectId);
     this.issueService
-      .postIssue(this.titleText, this.descriptionText, this.statusValue, this.priorityValue, this.severityValue, this.ownerEmailText, this.projectId)
+      .postIssue(this.titleText, this.descriptionText, this.statusValue, this.priorityValue, this.severityValue, this.ownerEmailText, this.projectIdText)
       .subscribe({
         next: (responseData) => {
           this.issueData.set(responseData); 
