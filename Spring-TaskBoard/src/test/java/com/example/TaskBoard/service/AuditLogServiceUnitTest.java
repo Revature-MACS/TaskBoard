@@ -40,10 +40,8 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testLog_ShouldSaveAuditLog() {
-        // Arrange
         when(auditLogRepository.save(any(AuditLog.class))).thenReturn(testAuditLog);
 
-        // Act
         auditLogService.log(
                 AuditLog.EntityType.PROJECT,
                 "test-project-id",
@@ -51,7 +49,6 @@ public class AuditLogServiceUnitTest {
                 "admin@test.com",
                 "Test project created");
 
-        // Assert
         ArgumentCaptor<AuditLog> auditLogCaptor = ArgumentCaptor.forClass(AuditLog.class);
         verify(auditLogRepository, times(1)).save(auditLogCaptor.capture());
 
@@ -65,17 +62,14 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testLogProjectAction_ShouldCallLogWithProjectEntityType() {
-        // Arrange
         when(auditLogRepository.save(any(AuditLog.class))).thenReturn(testAuditLog);
 
-        // Act
         auditLogService.logProjectAction(
                 "project-123",
                 AuditLog.ActionType.UPDATE,
                 "user@test.com",
                 "Updated project");
 
-        // Assert
         ArgumentCaptor<AuditLog> auditLogCaptor = ArgumentCaptor.forClass(AuditLog.class);
         verify(auditLogRepository, times(1)).save(auditLogCaptor.capture());
 
@@ -87,17 +81,14 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testLogIssueAction_ShouldCallLogWithIssueEntityType() {
-        // Arrange
         when(auditLogRepository.save(any(AuditLog.class))).thenReturn(testAuditLog);
 
-        // Act
         auditLogService.logIssueAction(
                 "issue-456",
                 AuditLog.ActionType.DELETE,
                 "admin@test.com",
                 "Deleted issue");
 
-        // Assert
         ArgumentCaptor<AuditLog> auditLogCaptor = ArgumentCaptor.forClass(AuditLog.class);
         verify(auditLogRepository, times(1)).save(auditLogCaptor.capture());
 
@@ -109,18 +100,14 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testGetAuditLogsForEntity_ShouldReturnLogsForSpecificEntity() {
-        // Arrange
         List<AuditLog> expectedLogs = Arrays.asList(testAuditLog);
         when(auditLogRepository.findByEntityTypeAndEntityId(
                 AuditLog.EntityType.PROJECT,
                 "test-project-id")).thenReturn(expectedLogs);
-
-        // Act
         List<AuditLog> result = auditLogService.getAuditLogsForEntity(
                 AuditLog.EntityType.PROJECT,
                 "test-project-id");
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals(testAuditLog, result.get(0));
@@ -131,7 +118,6 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testGetAuditLogsByEntityType_ShouldReturnLogsForEntityType() {
-        // Arrange
         AuditLog log2 = new AuditLog();
         log2.setEntityType(AuditLog.EntityType.PROJECT);
         log2.setEntityId("another-project-id");
@@ -141,11 +127,9 @@ public class AuditLogServiceUnitTest {
         when(auditLogRepository.findByEntityType(AuditLog.EntityType.PROJECT))
                 .thenReturn(expectedLogs);
 
-        // Act
         List<AuditLog> result = auditLogService.getAuditLogsByEntityType(
                 AuditLog.EntityType.PROJECT);
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(auditLogRepository, times(1)).findByEntityType(AuditLog.EntityType.PROJECT);
@@ -153,15 +137,11 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testGetAuditLogsByUser_ShouldReturnLogsForUser() {
-        // Arrange
         List<AuditLog> expectedLogs = Arrays.asList(testAuditLog);
         when(auditLogRepository.findByPerformedBy("admin@test.com"))
                 .thenReturn(expectedLogs);
-
-        // Act
         List<AuditLog> result = auditLogService.getAuditLogsByUser("admin@test.com");
 
-        // Assert
         assertNotNull(result);
         assertEquals(1, result.size());
         assertEquals("admin@test.com", result.get(0).getPerformedBy());
@@ -170,7 +150,6 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testGetAllAuditLogs_ShouldReturnAllLogs() {
-        // Arrange
         AuditLog log2 = new AuditLog();
         log2.setEntityType(AuditLog.EntityType.ISSUE);
         log2.setEntityId("issue-789");
@@ -179,10 +158,8 @@ public class AuditLogServiceUnitTest {
         List<AuditLog> expectedLogs = Arrays.asList(testAuditLog, log2);
         when(auditLogRepository.findAll()).thenReturn(expectedLogs);
 
-        // Act
         List<AuditLog> result = auditLogService.getAllAuditLogs();
 
-        // Assert
         assertNotNull(result);
         assertEquals(2, result.size());
         verify(auditLogRepository, times(1)).findAll();
@@ -190,17 +167,13 @@ public class AuditLogServiceUnitTest {
 
     @Test
     void testGetAuditLogsForEntity_ShouldReturnEmptyListWhenNoLogsFound() {
-        // Arrange
         when(auditLogRepository.findByEntityTypeAndEntityId(
                 AuditLog.EntityType.USER,
                 "nonexistent-id")).thenReturn(Arrays.asList());
-
-        // Act
         List<AuditLog> result = auditLogService.getAuditLogsForEntity(
                 AuditLog.EntityType.USER,
                 "nonexistent-id");
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
