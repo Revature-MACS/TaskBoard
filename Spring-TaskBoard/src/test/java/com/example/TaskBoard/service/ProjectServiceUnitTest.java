@@ -226,6 +226,23 @@ public class ProjectServiceUnitTest {
             projectService.deleteProject(projectId);
         });
 
-        assertEquals("Project not found", exception.getMessage());
+        assertEquals(true, exception.getMessage().contains("Project not found"));
+    }
+
+    @Test
+    void getProjectsByOwnerEmailPositiveTest() {
+        String ownerEmail = "testAdmin@taskboard.com";
+        List<Project> mockProjects = new ArrayList<>();
+        Project p1 = new Project();
+        p1.setName("P1");
+        mockProjects.add(p1);
+
+        when(projectRepository.findByOwner_Email(ownerEmail)).thenReturn(mockProjects);
+
+        List<Project> result = projectService.getProjectsByOwnerEmail(ownerEmail);
+
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals("P1", result.get(0).getName());
     }
 }

@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 export class LoginService {
   API_URL : string = "http://localhost:8080/users";
 
-  constructor(private httpClient : HttpClient, private jwtStorage: JwtStorage, private router: Router){
+  constructor(private httpClient : HttpClient){
 
   }
 
@@ -22,22 +22,6 @@ export class LoginService {
       "password": password,
     };
 
-    this.httpClient.post<TokenTransport>(
-      this.API_URL + "/login",
-      body,
-      {
-        observe:"response"
-      }
-    ).subscribe({
-        next: response =>{
-          if(response.body){
-            this.jwtStorage.setToken(response.body.token);
-            this.router.navigate(['/dashboard'])
-          }
-        },
-        error: err =>{
-          console.log(err);
-        }
-      });
+    return this.httpClient.post<TokenTransport>(this.API_URL + "/login", body, {observe:"response"});
   }
 }

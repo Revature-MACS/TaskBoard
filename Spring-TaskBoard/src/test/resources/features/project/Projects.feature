@@ -31,3 +31,15 @@ Feature: Project Management E2E
     And the user enters project id "11111111-1111-1111-1111-111111111111" to delete
     And the user submits the delete project form
     Then the project should be deleted successfully
+
+  Scenario: Admin can assign a user to a project
+    Given a user is logged in as an ADMIN
+    And the user navigates to the project page
+    When the user assigns user with id "00000000-0000-0000-0000-000000000004" to project with id "22222222-2222-2222-2222-222222222222"
+    Then the user should be assigned successfully
+
+  Scenario: Admin can remove a user from a project
+    Given a user is logged in as an ADMIN
+    And the user navigates to the project page
+    When the user removes user with id "00000000-0000-0000-0000-000000000004" from project with id "22222222-2222-2222-2222-222222222222"
+    Then the user should be removed successfully
