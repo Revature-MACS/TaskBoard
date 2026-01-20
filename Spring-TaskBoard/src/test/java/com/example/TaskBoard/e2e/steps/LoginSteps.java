@@ -25,8 +25,6 @@ public class LoginSteps {
     @And("the user attempts to login")
     public void the_user_attempts_to_login() {
         loginPage.attemptLogin();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("dashboardTitle")));
-
     }
 
     @Then("The user should be redirected to the dashboard")
