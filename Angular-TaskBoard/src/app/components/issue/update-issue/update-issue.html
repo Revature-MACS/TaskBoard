@@ -1,0 +1,36 @@
+<div class="container">
+    <h2>Issue to Update</h2>
+    <input type="text" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
+    <br>
+    <input type="text" placeholder="Issue ID" [(ngModel)]="updateIdText">
+    <br>
+    <input type="text" placeholder="Title" [(ngModel)]="updateTitleText">
+    <br>
+    <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
+    <br>
+    <p style="display: inline;">Status: </p>
+    <select [(ngModel)]="updateStatusValue">
+        @for (item of issueStatusList; track $index) {
+            <option [ngValue]="item">{{ item }}</option>
+        }
+    </select>
+    <br>
+    <p style="display: inline;">Priority: </p>
+    <select [(ngModel)]="updatePriorityValue">
+        @for (item of lowMedHighList; track $index) {
+            <option [ngValue]="item">{{ item }}</option>
+        }
+    </select>
+    <br>
+    <p style="display: inline;">Severity: </p>
+    <select [(ngModel)]="updateSeverityValue">
+        @for (item of lowMedHighList; track $index) {
+            <option [ngValue]="item">{{ item }}</option>
+        }
+    </select>
+    <br>
+    <button (click)="updateIssue()">Submit</button>
+    <div *ngIf="successMessageUpdateIssue()" class="success-message">
+        {{ successMessageUpdateIssue() }}
+    </div>
+</div>

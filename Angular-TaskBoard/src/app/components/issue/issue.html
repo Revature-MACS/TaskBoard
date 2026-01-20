@@ -1,87 +1,30 @@
 <div class="container">
-    <h1>This is a page to test Issue API</h1>
+    <h1>Issues Page</h1>
 
     <div>
-        <h2>Create Issue</h2>
-        <input type="text" placeholder="Title" [(ngModel)]="titleText">
-        <br>
-        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
-        <br>
-        <p style="display:inline">Status: </p>
-        <select [(ngModel)]="statusValue">
-            @for (item of issueStatusList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <p style="display:inline">Priority: </p>
-        <select [(ngModel)]="priorityValue">
-            @for (item of lowMedHighList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <p style="display:inline">Severity: </p>
-        <select [(ngModel)]="severityValue">
-            @for (item of lowMedHighList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <br>
-        <button (click)="postIssue()">Submit</button>
+        <app-create-issue></app-create-issue>
     </div>
-    
+
     <div>
-        <h2>Fetch Issue by ID</h2>
-        <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
-        <button (click)="getIssue()">Submit</button>
-        <h2>{{ issueId() }}</h2>
+        <app-fetch-issue></app-fetch-issue>
     </div>
-    
+
     <div>
-        <h2>Fetch ALL issues</h2>
-        <button (click)="getIssues()">Fetch Issues</button>
+        <app-fetch-all-issues></app-fetch-all-issues>
     </div>
-    
+
     <div>
-        <h2>Issue to delete</h2>
-        <input type="text" placeholder="Issue ID" [(ngModel)]="idDeleteValue">
-        <button (click)="deleteIssue()">Submit</button>
-        <h2>{{ issueDeleteId() }}</h2>
+        <app-delete-issue></app-delete-issue>
     </div>
-    
+
     <div>
-        <h2>Issue to Update</h2>
-        <input type="text" placeholder="Id" [(ngModel)]="updateIdText">
-        <br>
-        <input type="text" placeholder="Title" [(ngModel)]="updateTitleText">
-        <br>
-        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
-        <br>
-        <p style="display: inline;">Status: </p>
-        <select [(ngModel)]="updateStatusValue">
-            @for (item of issueStatusList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <p style="display: inline;">Priority: </p>
-        <select [(ngModel)]="updatePriorityValue">
-            @for (item of lowMedHighList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <p style="display: inline;">Severity: </p>
-        <select [(ngModel)]="updateSeverityValue">
-            @for (item of lowMedHighList; track $index) {
-                <option [ngValue]="item">{{ item }}</option>
-            }
-        </select>
-        <br>
-        <button (click)="updateIssue()">Submit</button>
+        <app-update-issue></app-update-issue>
     </div>
+
+    <div>
+        <app-search-issue></app-search-issue>
+    </div>
+
 </div>
 
 

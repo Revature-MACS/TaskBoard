@@ -1,5 +1,6 @@
 package com.example.TaskBoard.controller;
 
+import com.example.TaskBoard.entity.AuditLog;
 import com.example.TaskBoard.entity.Issue;
 import com.example.TaskBoard.service.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,9 +26,15 @@ public class IssueController {
     // POST - create Issue
     @PostMapping("/issues")
     public ResponseEntity<Issue> createIssue(@RequestBody Issue issue, @RequestHeader String authorization){
-        Issue createdIssue = issueService.createIssue(issue, authorization);
-        if(createdIssue != null){
-            return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+        try
+        {
+            Issue createdIssue = issueService.createIssue(issue, authorization);
+            if(createdIssue != null){
+                return ResponseEntity.status(HttpStatus.OK).body(createdIssue);
+            }
+        } catch (SQLException e)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
 
@@ -66,9 +74,30 @@ public class IssueController {
 
     // PUT - Update issue by ID
     @PutMapping("issues/{issueId}")
-    public ResponseEntity<Issue> updateIssueById(@PathVariable String issueId, @RequestBody Issue issue){
+    public ResponseEntity<Issue> updateIssueById(@PathVariable String issueId, @RequestBody Issue issue, @RequestHeader String authorization){
         issue.setIssueId(UUID.fromString(issueId));
-        Issue updatedIssue = issueService.updateIssue(issue);
+        Issue updatedIssue = issueService.updateIssue(issue, authorization);
+        if(updatedIssue == null)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(updatedIssue);
+    }
+
+    @GetMapping("/projects/{projectId}/issues")
+    public ResponseEntity<List<Issue>> getIssuesByProject(@PathVariable String projectId) {
+        UUID projectUUID = UUID.fromString(projectId);
+        List<Issue> issues = issueService.getIssuesByProject(projectUUID);
+        return ResponseEntity.ok(issues);
+    }
+
+    @GetMapping("/issues/{issueId}/history")
+    public ResponseEntity<List<AuditLog>> getIssueHistory(@PathVariable String issueId) {
+        UUID issueUUID = UUID.fromString(issueId);
+        if (issueService.findByIssueId(issueUUID) == null) {
+            return ResponseEntity.notFound().build();
+        }
+        List<AuditLog> history = issueService.getIssueHistory(issueUUID);
+        return ResponseEntity.ok(history);
     }
 }

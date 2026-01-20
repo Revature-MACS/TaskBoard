@@ -4,16 +4,28 @@
     <h1>Login</h1>
 
     <div>
+    @if(errorMessage()){
+      <div class="error-message">{{ errorMessage() }}</div>
+    }
+
     <h2>Email</h2>
-    <input type="text" placeholder="Email" [(ngModel)]="email"/>
+    @if(emailErrorMessage()){
+      <div class="error-message">{{  emailErrorMessage()  }}</div>
+    }
+    <input type="text" id="email" placeholder="Email" [(ngModel)]="email"/>
+
 
     <h2>Password</h2>
-    <input type="password" placeholder="Password" [(ngModel)]="password"/>
+    @if(passwordErrorMessage()){
+      <div class="error-message">{{  passwordErrorMessage()  }}</div>
+    }
+    <input type="password" id="password" placeholder="Password" [(ngModel)]="password"/>
+
     </div>
 
 
     <br><br>
-    <button (click)="attemptLogin()">Login</button>
+    <button id="loginButton" (click)="attemptLogin()">Login</button>
   </div>
 
 

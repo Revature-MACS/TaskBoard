@@ -4,6 +4,7 @@ import com.example.TaskBoard.dto.Token;
 import com.example.TaskBoard.entity.Project;
 import com.example.TaskBoard.entity.ProjectUser;
 import com.example.TaskBoard.entity.User;
+import com.example.TaskBoard.service.AuthService;
 import com.example.TaskBoard.service.ProjectService;
 import com.example.TaskBoard.service.ProjectUserService;
 import com.example.TaskBoard.service.UserService;
@@ -24,10 +25,22 @@ public class UserController {
 
     private final UserService userService;
     private final ProjectUserService projectUserService;
+    private final AuthService authService;
 
     @GetMapping()
     public ResponseEntity<List<User>> getAllUser(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsers());
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<User> getCurrentUser(@RequestHeader("Authorization") String authHeader){
+        java.util.UUID userId = authService.getUserId(authHeader);
+        if(userId == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+        return userService.getUserById(userId)
+                .map(user -> ResponseEntity.ok(user))
+                .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping("/register")
@@ -104,6 +117,27 @@ public class UserController {
 
 
         return ResponseEntity.status(HttpStatus.OK).body(userAssignment);
+    }
+
+    @DeleteMapping("/unassign")
+    public ResponseEntity<Void> unassignUserFromProject(@RequestBody ProjectUser userAssignment){
+
+        try {
+            projectUserService.unassignUserFromProject(userAssignment);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            return ResponseEntity.status(400).build();
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<List<User>> getUsersByProject(@PathVariable String projectId){
+        Project project = new Project();
+        project.setProjectId(java.util.UUID.fromString(projectId));
+        List<User> users = projectUserService.getAllProjectAssignedUsers(project);
+        return ResponseEntity.status(HttpStatus.OK).body(users);
     }
 
 }

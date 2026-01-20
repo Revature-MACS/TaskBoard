@@ -8,6 +8,9 @@
       <a routerLink="/dashboard">Dashboard</a>
       <a routerLink="/project">Projects</a>
       <a routerLink="/issue">Issues</a>
+      @if(currentUser()?.role === 'ADMIN'){
+        <a routerLink="/logs">Logs</a>
+      }
       <app-logout></app-logout>
     }
 

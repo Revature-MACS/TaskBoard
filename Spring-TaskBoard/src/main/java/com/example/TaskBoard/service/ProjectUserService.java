@@ -9,6 +9,8 @@ import com.example.TaskBoard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,5 +68,26 @@ public class ProjectUserService {
         }
 
         return proUserRepo.save(newAssignedPair);
+    }
+
+    @Transactional
+    public void unassignUserFromProject(ProjectUser assignedPair) throws SQLException {
+
+        User user = assignedPair.getUser();
+        Project project = assignedPair.getProject();
+
+        if(userRepo.findById(user.getUserID()).isEmpty()){
+            throw new SQLException("User with userID " + user.getUserID() + " does not exist!");
+        }
+
+        if(proRepo.findById((project.getProjectId())).isEmpty()){
+            throw new SQLException(("Project with projectID " + project.getProjectId() + " does not exist!"));
+        }
+
+        if(proUserRepo.findProjectUserByUserAndProject(user, project).isEmpty()){
+            throw new SQLException("User is not assigned to this project!");
+        }
+
+        proUserRepo.deleteByUserAndProject(user, project);
     }
 }

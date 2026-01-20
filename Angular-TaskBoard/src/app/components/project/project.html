@@ -1,26 +1,27 @@
 <div class="container">
-    <h1>Project API Testing Page</h1>
+    <h1>Projects</h1>
 
     <div>
         <h2>Create Project</h2>
-        <input type="text" placeholder="Project Name" [(ngModel)]="nameText">
+        <input type="text" id="projectName" placeholder="Project Name" [(ngModel)]="nameText">
         <br>
-        <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
+        <textarea id="projectDescription" placeholder="Description" rows="5" cols="30"
+            [(ngModel)]="descriptionText"></textarea>
         <br>
-        <input type="text" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
+        <input type="text" id="ownerEmail" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
         <br>
         <br>
-        <button (click)="postProject()">Submit</button>
-        <div *ngIf="successMessageAddProject()" class="success-message">
+        <button id="createProjectSubmit" (click)="postProject()">Submit</button>
+        <div id="successMessageAddProject" *ngIf="successMessageAddProject()" class="success-message">
             {{ successMessageAddProject() }}
         </div>
     </div>
 
     <div>
         <h2>Fetch Project by ID</h2>
-        <input type="text" placeholder="Project ID" [(ngModel)]="idValue">
-        <button (click)="getProjectById()">Submit</button>
-        <div *ngIf="projectData()">
+        <input type="text" id="projectIdInput" placeholder="Project ID" [(ngModel)]="idValue">
+        <button id="getProjectByIdSubmit" (click)="getProjectById()">Submit</button>
+        <div id="projectData" *ngIf="projectData()">
             <h3>Project Found:</h3>
             <div class="project-display">
                 <p><strong>ID:</strong> {{ projectData()?.projectId }}</p>
@@ -33,9 +34,9 @@
 
     <div>
         <h2>Fetch ALL projects</h2>
-        <button (click)="getProjects()">Fetch Projects</button>
+        <button id="fetchAllProjectsButton" (click)="getProjects()">Fetch Projects</button>
 
-        <div *ngIf="allProjects().length > 0" class="projects-list">
+        <div id="allProjects" *ngIf="allProjects().length > 0" class="projects-list">
             <h3>Found ({{ allProjects().length }}) Projects:</h3>
             <div *ngFor="let project of allProjects();" class="project-card">
                 <p><strong>ID:</strong> {{ project.projectId }}</p>
@@ -49,9 +50,9 @@
 
     <div>
         <h2>Fetch Projects by Owner Email</h2>
-        <input type="text" placeholder="Owner Email" [(ngModel)]="ownerEmailSearch">
-        <button (click)="getProjectsByOwnerEmail()">Submit</button>
-        <div *ngIf="projectsByOwnerEmail().length > 0" class="projects-list">
+        <input type="text" id="ownerEmailSearch" placeholder="Owner Email" [(ngModel)]="ownerEmailSearch">
+        <button id="getProjectsByOwnerSubmit" (click)="getProjectsByOwnerEmail()">Submit</button>
+        <div id="projectsByOwnerEmail" *ngIf="projectsByOwnerEmail().length > 0" class="projects-list">
             <h3>Projects by {{ ownerEmailSearch }} ({{ projectsByOwnerEmail().length }}):</h3>
             <div *ngFor="let project of projectsByOwnerEmail()">
                 <p><strong>ID:</strong> {{ project.projectId }}</p>
@@ -67,32 +68,33 @@
 
     <div>
         <h2>Project to delete</h2>
-        <input type="text" placeholder="Project ID" [(ngModel)]="idValue">
-        <button (click)="deleteProjectById()">Submit</button>
-        <div *ngIf="deletedProjectData()">
+        <input type="text" id="deleteProjectIdInput" placeholder="Project ID" [(ngModel)]="idValue">
+        <button id="deleteProjectSubmit" (click)="deleteProjectById()">Submit</button>
+        <div id="deletedProjectData" *ngIf="deletedProjectData()">
             <h3>Deleted Project:</h3>
             <div class="project-display">
                 <p><strong>ID:</strong> {{ deletedProjectData()?.projectId }}</p>
                 <p><strong>Name:</strong> {{ deletedProjectData()?.name }}</p>
             </div>
         </div>
-        <div *ngIf="successMessageDeleteProject()" class="success-message">
+        <div id="successMessageDeleteProject" *ngIf="successMessageDeleteProject()" class="success-message">
             {{ successMessageDeleteProject() }}
         </div>
     </div>
 
     <div>
         <h2>Project to Update</h2>
-        <input type="text" placeholder="Project ID" [(ngModel)]="updateIdText">
+        <input type="text" id="updateProjectIdInput" placeholder="Project ID" [(ngModel)]="updateIdText">
         <br>
-        <input type="text" placeholder="Project Name" [(ngModel)]="updateNameText">
+        <input type="text" id="updateProjectName" placeholder="Project Name" [(ngModel)]="updateNameText">
         <br>
-        <textarea placeholder="Description" rows="10" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
+        <textarea id="updateProjectDescription" placeholder="Description" rows="10" cols="30"
+            [(ngModel)]="updateDescriptionText"></textarea>
         <br>
-        <input type="text" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
+        <input type="text" id="updateOwnerEmail" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
         <br>
-        <button (click)="updateProjectById()">Submit</button>
-        <div *ngIf="successMessageUpdateProject()" class="success-message">
+        <button id="updateProjectSubmit" (click)="updateProjectById()">Submit</button>
+        <div id="successMessageUpdateProject" *ngIf="successMessageUpdateProject()" class="success-message">
             {{ successMessageUpdateProject() }}
         </div>
     </div>
@@ -105,11 +107,46 @@
         <input type="text" placeholder="Project ID" [(ngModel)]="assignProjectId">
         <br><br>
         <button (click)="assignUserToProject()">Assign User</button>
-        <div *ngIf="successMessageAssign()" class="success-message">
+        <div id="successMessageAssign" *ngIf="successMessageAssign()" class="success-message">
             {{ successMessageAssign() }}
         </div>
-        <div *ngIf="errorMessageAssign()" class="error-message">
+        <div id="errorMessageAssign" *ngIf="errorMessageAssign()" class="error-message">
             {{ errorMessageAssign() }}
+        </div>
+    </div>
+
+    <div>
+        <h2>View Assigned Users</h2>
+        <input type="text" placeholder="Project ID" [(ngModel)]="viewProjectId">
+        <button (click)="getAssignedUsers()">Get Users</button>
+
+        <div id="assignedUsers" *ngIf="assignedUsers().length > 0" class="projects-list">
+            <h3>Assigned Users ({{ assignedUsers().length }}):</h3>
+            <div *ngFor="let user of assignedUsers()" class="project-card">
+                <p><strong>User ID:</strong> {{ user.userID }}</p>
+                <p><strong>Name:</strong> {{ user.name }}</p>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Role:</strong> {{ user.role }}</p>
+            </div>
+        </div>
+        <div id="assignedUsersEmpty" *ngIf="assignedUsers().length === 0">
+            No users assigned to this project.
+        </div>
+    </div>
+
+    <div>
+        <h2>Remove User from Project (Admin Only)</h2>
+        <p>Remove a Tester or Developer from a project.</p>
+        <input type="text" placeholder="User ID" [(ngModel)]="unassignUserId">
+        <br>
+        <input type="text" placeholder="Project ID" [(ngModel)]="unassignProjectId">
+        <br><br>
+        <button (click)="unassignUserFromProject()">Remove User</button>
+        <div id="successMessageUnassign" *ngIf="successMessageUnassign()" class="success-message">
+            {{ successMessageUnassign() }}
+        </div>
+        <div id="errorMessageUnassign" *ngIf="errorMessageUnassign()" class="error-message">
+            {{ errorMessageUnassign() }}
         </div>
     </div>
 </div>

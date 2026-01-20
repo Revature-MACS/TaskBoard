@@ -5,6 +5,8 @@ import com.example.TaskBoard.util.TokenUtility;
 import io.jsonwebtoken.JwtException;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AuthService {
 
@@ -22,6 +24,19 @@ public class AuthService {
             String token = headerData.split(" ")[1];
             System.out.println(token);
             return tokenUtility.extractUserRole(token);
+        } catch (JwtException e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public UUID getUserId(String headerData){
+        if(headerData == null){
+            return null;
+        }
+        try{
+            String token = headerData.split(" ")[1];
+            return UUID.fromString(tokenUtility.extractId(token));
         } catch (JwtException e){
             e.printStackTrace();
             return null;

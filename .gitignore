@@ -1,1 +1,5 @@
 Spring-TaskBoard/.idea/*
+
+# IDE and Build files
+Spring-TaskBoard/.vscode/settings.json
+Spring-TaskBoard/gradlew

@@ -169,3 +169,6 @@ gradle-app.setting
 /.idea/vcs.xml
 
 *.env
+
+# Cucumber test reports
+target/cucumber-report.html

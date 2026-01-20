@@ -6,10 +6,12 @@ import com.example.TaskBoard.repository.UserRepository;
 import com.example.TaskBoard.util.TokenUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -34,12 +36,21 @@ public class UserService {
             throw new IllegalArgumentException("The password field must not be empty!");
         }
 
+        if(userInfo.getEmail().isEmpty()){
+            throw new IllegalArgumentException("The email field must not be empty!");
+        }
+
         // If the userInfo didn't trigger any exceptions, then it must be valid.
     }
 
     // GET /users - Gets all user in the database
     public List<User> getAllUsers(){
         return userRepo.findAll();
+    }
+
+    // GET /users/me - Gets user by ID (from JWT)
+    public Optional<User> getUserById(UUID userId){
+        return userRepo.findById(userId);
     }
 
     // POST /users/register - Creates a new user account
@@ -92,6 +103,7 @@ public class UserService {
     DELETE /users/{email} - Deletes a User's account.
     Admins can delete any account, but Testers and Developers can only delete their account
     */
+    @Transactional
     public void deleteUser(String email){
         userRepo.deleteUserByEmail(email);
     }

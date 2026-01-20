@@ -6,7 +6,10 @@ import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.ProjectRepository;
 import com.example.TaskBoard.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,67 +35,83 @@ public class ProjectService {
 
     // POST /projects - Create project (Admin only)
     public Project createProject(Project project) {
+        if (project.getOwner() == null || project.getOwner().getEmail() == null) {
+            throw new RuntimeException("Project owner and email are required");
+        }
+
         User owner = userRepository.findUserByEmail(project.getOwner().getEmail())
                 .orElseThrow(() -> new RuntimeException("Owner not found"));
-        
+
         // Validate that owner is ADMIN
         if (owner.getRole() != User.UserRole.ADMIN) {
             throw new RuntimeException("Only ADMIN users can create projects");
         }
-        
+
         project.setOwner(owner);
         Project savedProject = projectRepository.save(project);
-        
+
         // Audit log
         auditLogService.logProjectAction(
                 savedProject.getProjectId().toString(),
                 AuditLog.ActionType.CREATE,
                 owner.getEmail(),
-                "Created project: " + savedProject.getName()
-        );
-        
+                "Created project: " + savedProject.getName());
+
         return savedProject;
     }
 
     // PUT /projects/{id} - Update project (Admin only)
     public Project updateProject(Project project) {
+        if (project.getProjectId() == null) {
+            throw new RuntimeException("Project ID is required for update");
+        }
+
+        if (!projectRepository.existsById(project.getProjectId())) {
+            throw new RuntimeException("Project not found");
+        }
+
+        if (project.getOwner() == null || project.getOwner().getEmail() == null) {
+            throw new RuntimeException("Project owner and email are required");
+        }
+
         User owner = userRepository.findUserByEmail(project.getOwner().getEmail())
                 .orElseThrow(() -> new RuntimeException("Owner not found"));
-        
+
         // Validate that owner is ADMIN
         if (owner.getRole() != User.UserRole.ADMIN) {
             throw new RuntimeException("Only ADMIN users can update projects");
         }
-        
+
         project.setOwner(owner);
         Project savedProject = projectRepository.save(project);
-        
+
         // Audit log
         auditLogService.logProjectAction(
                 savedProject.getProjectId().toString(),
                 AuditLog.ActionType.UPDATE,
                 owner.getEmail(),
-                "Updated project: " + savedProject.getName()
-        );
-        
+                "Updated project: " + savedProject.getName());
+
         return savedProject;
     }
 
     // DELETE /projects/{id} - Delete project (Admin only)
     public void deleteProject(UUID projectId) {
         Optional<Project> project = projectRepository.findById(projectId);
+        if (!project.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Project not found");
+        }
         String projectName = project.map(Project::getName).orElse("Unknown");
         String ownerEmail = project.map(p -> p.getOwner().getEmail()).orElse("Unknown");
-        
+
         projectRepository.deleteById(projectId);
-        
+
         // Audit log
         auditLogService.logProjectAction(
                 projectId.toString(),
                 AuditLog.ActionType.DELETE,
                 ownerEmail,
-                "Deleted project: " + projectName
-        );
+                "Deleted project: " + projectName);
     }
 
     public List<Project> getProjectsByOwnerEmail(String ownerEmail) {

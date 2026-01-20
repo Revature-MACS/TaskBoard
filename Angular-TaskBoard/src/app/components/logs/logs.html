@@ -1,0 +1,63 @@
+<div class="container">
+    <h1>Audit Logs</h1>
+
+    <div class="filters-section">
+        <h3>Filters</h3>
+        <div class="filters">
+            <div class="filter-group">
+                <label for="entityType">Entity Type:</label>
+                <select id="entityType" [(ngModel)]="filterEntityType" (change)="applyFilters()">
+                    <option value="">All</option>
+                    <option *ngFor="let type of entityTypes" [value]="type">{{ type }}</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="actionType">Action Type:</label>
+                <select id="actionType" [(ngModel)]="filterActionType" (change)="applyFilters()">
+                    <option value="">All</option>
+                    <option *ngFor="let type of actionTypes" [value]="type">{{ type }}</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label for="userFilter">User:</label>
+                <input id="userFilter" type="text" [(ngModel)]="filterUser" (input)="applyFilters()" placeholder="Filter by user email">
+            </div>
+
+            <button class="clear-btn" (click)="clearFilters()">Clear Filters</button>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button (click)="loadLogs()">Refresh Logs</button>
+    </div>
+
+    <div *ngIf="errorMessage()" class="error-message">
+        {{ errorMessage() }}
+    </div>
+
+    <div *ngIf="isLoading()" class="loading-message">
+        Loading...
+    </div>
+
+    <div *ngIf="!isLoading() && filteredLogs().length > 0" class="logs-list">
+        <p class="log-count">Showing {{ filteredLogs().length }} of {{ logs().length }} logs</p>
+        <div *ngFor="let log of filteredLogs()" class="log-card">
+            <div class="log-header">
+                <span class="action-badge" [ngClass]="log.actionType.toLowerCase()">{{ log.actionType }}</span>
+                <span class="entity-badge">{{ log.entityType }}</span>
+                <span class="timestamp">{{ formatTimestamp(log.timestamp) }}</span>
+            </div>
+            <div class="log-body">
+                <p><strong>Entity ID:</strong> {{ log.entityId }}</p>
+                <p><strong>Performed By:</strong> {{ log.performedBy || 'Unknown' }}</p>
+                <p *ngIf="log.details"><strong>Details:</strong> {{ log.details }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="!isLoading() && filteredLogs().length === 0" class="no-data-message">
+        No audit logs found.
+    </div>
+</div>

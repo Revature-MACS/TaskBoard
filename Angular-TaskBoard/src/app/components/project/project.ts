@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectSubscriber } from '../../classes/project-subscriber';
 import { CommonModule } from '@angular/common';
 import { ProjectData } from '../../interfaces/project-data';
+import { UserData } from '../../interfaces/user-data';
 
 @Component({
   selector: 'app-project',
@@ -37,11 +38,18 @@ export class Project extends ProjectSubscriber {
 
   ownerEmailSearch: string = '';
 
-  // Assign user to project
   assignUserId: string = '';
   assignProjectId: string = '';
   successMessageAssign: WritableSignal<string> = signal('');
   errorMessageAssign: WritableSignal<string> = signal('');
+
+  unassignUserId: string = '';
+  unassignProjectId: string = '';
+  successMessageUnassign: WritableSignal<string> = signal('');
+  errorMessageUnassign: WritableSignal<string> = signal('');
+
+  viewProjectId: string = '';
+  assignedUsers: WritableSignal<UserData[]> = signal([]);
 
   getProjects() {
     this.projectService.getProjects().subscribe({
@@ -116,9 +124,6 @@ export class Project extends ProjectSubscriber {
   }
 
   assignUserToProject() {
-    this.errorMessageAssign.set('');
-    this.successMessageAssign.set('');
-
     if (this.assignUserId.trim() === '' || this.assignProjectId.trim() === '') {
       this.errorMessageAssign.set('Both User ID and Project ID are required');
       return;
@@ -131,6 +136,41 @@ export class Project extends ProjectSubscriber {
       },
       error: (err) => {
         this.errorMessageAssign.set('Failed to assign user to project');
+        console.error(err);
+      }
+    });
+  }
+
+  getAssignedUsers() {
+    if (this.viewProjectId.trim() === '') {
+      return;
+    }
+    this.projectService.getAssignedUsers(this.viewProjectId).subscribe({
+      next: (responseData) => {
+        this.assignedUsers.set(responseData);
+        console.log(responseData);
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
+
+  unassignUserFromProject() {
+    if (this.unassignUserId.trim() === '' || this.unassignProjectId.trim() === '') {
+      this.errorMessageUnassign.set('Both User ID and Project ID are required');
+      return;
+    }
+
+    this.projectService.unassignUserFromProject(this.unassignUserId, this.unassignProjectId).subscribe({
+      next: () => {
+        this.successMessageUnassign.set(`User ${this.unassignUserId} removed from Project ${this.unassignProjectId}`);
+        this.errorMessageUnassign.set('');
+        console.log('User unassigned successfully');
+      },
+      error: (err) => {
+        this.errorMessageUnassign.set('Failed to remove user from project');
+        this.successMessageUnassign.set('');
         console.error(err);
       }
     });

@@ -1,0 +1,30 @@
+<div>
+    <h2>Create Issue</h2>
+    <input type="text" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
+    <br>
+    <input type="text" placeholder="Project ID" [(ngModel)]="projectId">
+    <br>
+    <input type="text" placeholder="Title" [(ngModel)]="titleText">
+    <br>
+    <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
+    <br>
+    <p style="display:inline">Priority: </p>
+    <select [(ngModel)]="priorityValue">
+        @for (item of lowMedHighList; track $index) {
+            <option [ngValue]="item">{{ item }}</option>
+        }
+    </select>
+    <br>
+    <p style="display:inline">Severity: </p>
+    <select [(ngModel)]="severityValue">
+        @for (item of lowMedHighList; track $index) {
+            <option [ngValue]="item">{{ item }}</option>
+        }
+    </select>
+    <br>
+    <br>
+    <button (click)="postIssue()">Submit</button>
+    <div *ngIf="successMessageAddIssue()" class="success-message">
+        {{successMessageAddIssue()}}
+    </div>
+</div>

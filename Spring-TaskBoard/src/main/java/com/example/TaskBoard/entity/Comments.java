@@ -30,7 +30,7 @@ public class Comments implements Serializable {
 //    @JsonFormat(pattern = "HH:mm:ss")
     private LocalTime time;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "creator_name", nullable = true)
     private User user;
 
