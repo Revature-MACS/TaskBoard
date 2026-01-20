@@ -4,6 +4,7 @@ import com.example.TaskBoard.dto.Token;
 import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.UserRepository;
 import com.example.TaskBoard.util.TokenUtility;
+import com.example.TaskBoard.util.PasswordUtility;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class UserService {
     private final TokenUtility tokenUtility;
 
     // A helper function that enforces basic table constraints
-    private void validateUserInfo(User userInfo) throws SQLException, IllegalArgumentException{
+    private void validateUserInfo(User userInfo) throws IllegalArgumentException{
 
 
         /*
@@ -41,6 +42,21 @@ public class UserService {
         }
 
         // If the userInfo didn't trigger any exceptions, then it must be valid.
+    }
+
+    // Manipulates the object itself so no need to return anything
+    private void encryptPassword(User newUserCreds){
+        newUserCreds.setPasswordSalt(PasswordUtility.generateSalt());
+        newUserCreds.setPassword(getEncryptedPassword(newUserCreds));
+    }
+
+    // Useful for checking a password against the already encrypted version
+    private String getEncryptedPassword(User userCreds){
+        return PasswordUtility.encryptPassword(userCreds.getPassword(), userCreds.getPasswordSalt());
+    }
+
+    private String getEncryptedPassword(String password, String salt){
+        return PasswordUtility.encryptPassword(password, salt);
     }
 
     // GET /users - Gets all user in the database
@@ -69,6 +85,7 @@ public class UserService {
             throw new SQLException("A user associated with the email " + userInfo.getEmail() + " already exist!");
         }
 
+        encryptPassword(userInfo);
         User createdUser = userRepo.save(userInfo);
 
         return new Token(tokenUtility.generateLoginToken(createdUser.getUserID(), createdUser.getRole()));
@@ -91,6 +108,11 @@ public class UserService {
         // Ensure that a user with this email already exists
         if(oldUserDetails.isEmpty()){
             throw new SQLException("User with email " + email + " was not found!");
+        }
+
+        // If the password has changed, encrypt new password while getting new salt
+        if(!oldUserDetails.get().getPassword().equals(getEncryptedPassword(userInfo))){
+            encryptPassword(userInfo);
         }
 
         // Add email to the new, valid information
@@ -119,8 +141,20 @@ public class UserService {
         For now, it returns the user information, if any exist.
         */
 
-        Optional<User> loginAttempt = userRepo.findUserByEmailAndPassword(userInfo.getEmail(),
-                userInfo.getPassword());
+        // Login details does not contain salt, so attempt to retrieve the user first
+        Optional<User> loginAttempt = userRepo.findUserByEmail(userInfo.getEmail());
+
+        if(loginAttempt.isPresent() && loginAttempt.get().getPasswordSalt() != null){
+            String loginEncryptPass = getEncryptedPassword(userInfo.getPassword(), loginAttempt.get().getPasswordSalt());
+
+            loginAttempt = userRepo.findUserByEmailAndPassword(userInfo.getEmail(),
+                    loginEncryptPass);
+        }
+
+        // This adds support for pre-populated users for testing
+        else if(loginAttempt.isPresent()){
+            loginAttempt = userRepo.findUserByEmailAndPassword(userInfo.getEmail(), userInfo.getPassword());
+        }
 
         if(loginAttempt.isPresent()){
             User user = loginAttempt.get();

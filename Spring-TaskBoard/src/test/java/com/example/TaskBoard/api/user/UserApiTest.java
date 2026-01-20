@@ -7,9 +7,11 @@ import com.example.TaskBoard.entity.User.UserRole;
 import com.example.TaskBoard.repository.ProjectRepository;
 import com.example.TaskBoard.repository.ProjectUserRepository;
 import com.example.TaskBoard.repository.UserRepository;
+import com.example.TaskBoard.util.PasswordUtility;
 import com.example.TaskBoard.util.TokenUtility;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -196,9 +198,14 @@ public class UserApiTest {
                 .statusCode(HttpStatus.OK.value())
                 .body("$", notNullValue())
                 .body("email", is(user.getEmail()))
-                .body("password", is(user.getPassword()))
+                .body("password", is(not((user.getPassword()))))
                 .body("name", is(user.getName()))
                 .body("role", is(user.getRole().toString()));
+
+        // Groovy is not capable of parsing some encrypted passwords, so test here
+        user = userRepository.findUserByEmail(user.getEmail()).orElseThrow();
+        assertEquals(PasswordUtility.encryptPassword("password",
+                        user.getPasswordSalt()), user.getPassword());
     }
 
     @Test
