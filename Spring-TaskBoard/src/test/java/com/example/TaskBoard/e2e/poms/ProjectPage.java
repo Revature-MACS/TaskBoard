@@ -1,5 +1,7 @@
 package com.example.TaskBoard.e2e.poms;
 
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -71,6 +73,12 @@ public class ProjectPage extends ParentPOM {
     @FindBy(id = "successMessageUpdateProject")
     private WebElement successMessageUpdateProject;
 
+    @FindBy(id = "errorMessageAssign")
+    private WebElement errorMessageAssign;
+
+    @FindBy(id = "errorMessageUnassign")
+    private WebElement errorMessageUnassign;
+
     public ProjectPage(WebDriver driver) {
         super(driver);
     }
@@ -138,5 +146,65 @@ public class ProjectPage extends ParentPOM {
 
     public String getSuccessMessageUpdateProject() {
         return successMessageUpdateProject.getText();
+    }
+
+    public int getProjectsByOwnerListSize() {
+        return driver.findElements(By.cssSelector("#projectsByOwnerEmail > div")).size();
+    }
+
+    public void enterAssignUserDetails(String userId, String projectId) {
+        driver.findElement(By
+                .xpath("//div[h2[contains(text(),'Assign User')]]//input[@placeholder='User ID']")).sendKeys(userId);
+        driver.findElement(By
+                .xpath("//div[h2[contains(text(),'Assign User')]]//input[@placeholder='Project ID']"))
+                .sendKeys(projectId);
+    }
+
+    public void clickAssignUserSubmit() {
+        driver.findElement(By.xpath("//button[text()='Assign User']")).click();
+    }
+
+    public String getSuccessMessageAssign() {
+        return successMessageAssign.getText();
+    }
+
+    public void enterUnassignUserDetails(String userId, String projectId) {
+        driver.findElement(By
+                .xpath("//div[h2[contains(text(),'Remove User')]]//input[@placeholder='User ID']")).sendKeys(userId);
+        driver.findElement(By
+                .xpath("//div[h2[contains(text(),'Remove User')]]//input[@placeholder='Project ID']"))
+                .sendKeys(projectId);
+    }
+
+    public void clickUnassignUserSubmit() {
+        driver.findElement(By.xpath("//button[text()='Remove User']")).click();
+    }
+
+    public String getSuccessMessageUnassign() {
+        return successMessageUnassign.getText();
+    }
+
+    public boolean isErrorMessageAssignDisplayed() {
+        try {
+            return errorMessageAssign.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public String getErrorMessageAssign() {
+        return errorMessageAssign.getText();
+    }
+
+    public boolean isErrorMessageUnassignDisplayed() {
+        try {
+            return errorMessageUnassign.isDisplayed();
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
+
+    public String getErrorMessageUnassign() {
+        return errorMessageUnassign.getText();
     }
 }
