@@ -1,12 +1,12 @@
 <div class="container">
     <h2>Issue to Update</h2>
-    <input type="text" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
+    <input id="updateOwnerEmail" type="text" placeholder="Owner Email" [(ngModel)]="updateOwnerEmailText">
     <br>
-    <input type="text" placeholder="Issue ID" [(ngModel)]="updateIdText">
+    <input id="updateIssueId" type="text" placeholder="Issue ID" [(ngModel)]="updateIdText">
     <br>
-    <input type="text" placeholder="Title" [(ngModel)]="updateTitleText">
+    <input id="updateIssueTitle" type="text" placeholder="Title" [(ngModel)]="updateTitleText">
     <br>
-    <textarea placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
+    <textarea id="updateIssueDescription" placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
     <br>
     <p style="display: inline;">Status: </p>
     <select [(ngModel)]="updateStatusValue">
@@ -29,8 +29,11 @@
         }
     </select>
     <br>
-    <button (click)="updateIssue()">Submit</button>
-    <div *ngIf="successMessageUpdateIssue()" class="success-message">
+    <button id="updateIssueSubmitButton" (click)="updateIssue()">Submit</button>
+    <div id="updateIssueSuccessMessage" *ngIf="successMessageUpdateIssue()" class="success-message">
         {{ successMessageUpdateIssue() }}
     </div>
+    @if(errorMessage()){
+        <div id="updateIssueErrorMessage" class="error-message">{{ errorMessage() }}</div>
+    }
 </div>

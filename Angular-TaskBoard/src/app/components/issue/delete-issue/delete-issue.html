@@ -1,7 +1,7 @@
 <div>
     <h2>Issue to delete</h2>
-    <input type="text" placeholder="Issue ID" [(ngModel)]="idDeleteValue">
-    <button (click)="deleteIssue()">Submit</button>
+    <input id="deleteIssueId" type="text" placeholder="Issue ID" [(ngModel)]="idDeleteValue">
+    <button id="deleteIssueSubmitButton" (click)="deleteIssue()">Submit</button>
     <div *ngIf="deletedIssueData()">
         <h3>Deleted Issue:</h3>
         <div class="project-display">
@@ -9,7 +9,10 @@
             <p><strong>Name:</strong> {{deletedIssueData()?.title}}</p>
         </div>
     </div>
-    <div *ngIf="successMessageDeleteIssue()" class="success-message">
+    <div id="successMessageDeleteIssue" *ngIf="successMessageDeleteIssue()" class="success-message">
         {{ successMessageDeleteIssue() }}
     </div>
+    @if(errorMessage()){
+        <div class="error-message">{{ errorMessage() }}</div>
+    }
 </div>

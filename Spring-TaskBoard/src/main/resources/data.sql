@@ -1,6 +1,6 @@
 INSERT INTO users (user_id, email, name, password, role) VALUES ('00000000-0000-0000-0000-000000000001', 'admin@taskboard.com', 'Admin User', 'admin123', 'ADMIN');
 INSERT INTO users (user_id, email, name, password, role) VALUES ('00000000-0000-0000-0000-000000000002', 'dev1@taskboard.com', 'John Developer', 'dev123', 'DEVELOPER');
-INSERT INTO users (user_id, email, name, password, role) VALUES ('00000000-0000-0000-0000-000000000003', 'tester1@taskboard.com', 'Alice Tester', 'test123', 'TESTER');
+INSERT INTO users (user_id, email, name, password, role) VALUES ('00000000-0000-0000-0000-000000000003', 'tester1@taskboard.com', 'Alice Tester', 'testerPassword', 'TESTER');
 INSERT INTO users (user_id, email, name, password, role) VALUES ('00000000-0000-0000-0000-000000000004', 'dev2@taskboard.com', 'Bob Developer', 'dev123', 'DEVELOPER');
 INSERT INTO projects (project_id, name, description, owner_id, created_at) VALUES ('11111111-1111-1111-1111-111111111111', 'E-Commerce Platform', 'A full-featured online shopping platform.', 'admin@taskboard.com', 1705152000000);
 INSERT INTO projects (project_id, name, description, owner_id, created_at) VALUES ('22222222-2222-2222-2222-222222222222', 'Mobile Banking App', 'Secure mobile banking application.', 'admin@taskboard.com', 1705152000000);

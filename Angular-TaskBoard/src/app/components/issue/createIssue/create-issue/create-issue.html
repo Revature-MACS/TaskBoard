@@ -1,12 +1,12 @@
 <div>
     <h2>Create Issue</h2>
-    <input type="text" id="ownerEmail" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
+    <input type="text" id="createOwnerEmail" placeholder="Owner Email" [(ngModel)]="ownerEmailText">
     <br>
-    <input type="text" id="projectId" placeholder="Project ID" [(ngModel)]="projectIdText">
+    <input type="text" id="createProjectId" placeholder="Project ID" [(ngModel)]="projectIdText">
     <br>
-    <input type="text" id="issueTitle" placeholder="Title" [(ngModel)]="titleText">
+    <input type="text" id="createIssueTitle" placeholder="Title" [(ngModel)]="titleText">
     <br>
-    <textarea id="issueDescription" placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
+    <textarea id="createIssueDescription" placeholder="Description" rows="5" cols="30" [(ngModel)]="descriptionText"></textarea>
     <br>
     <p style="display:inline">Priority: </p>
     <select [(ngModel)]="priorityValue">
@@ -24,6 +24,9 @@
     <br>
     <br>
     <button id="createIssueSubmit" (click)="postIssue()">Submit</button>
+    @if(errorMessage()){
+        <div id="errorMessageAddIssue" class="error-message">{{ errorMessage() }}</div>
+    }
     <div id="successMessageAddIssue" *ngIf="successMessageAddIssue()" class="success-message">
         {{successMessageAddIssue()}}
     </div>

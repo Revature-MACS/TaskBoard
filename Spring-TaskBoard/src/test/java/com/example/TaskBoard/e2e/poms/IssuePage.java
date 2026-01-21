@@ -12,16 +12,16 @@ public class IssuePage extends ParentPOM {
 
     private final String URL = "http://localhost:4200/issue";
 
-    @FindBy(id = "issueTitle")
+    @FindBy(id = "createIssueTitle")
     private WebElement issueTitleInput;
 
-    @FindBy(id = "issueDescription")
+    @FindBy(id = "createIssueDescription")
     private WebElement issueDescriptionInput;
 
-    @FindBy(id = "ownerEmail")
+    @FindBy(id = "createOwnerEmail")
     private WebElement issueOwnerInput;
 
-    @FindBy(id = "projectId")
+    @FindBy(id = "createProjectId")
     private WebElement issueProjectIdInput;
 
     @FindBy(id = "createIssueSubmit")
@@ -29,6 +29,42 @@ public class IssuePage extends ParentPOM {
 
     @FindBy(id = "successMessageAddIssue")
     private WebElement successMessageAddIssue;
+
+    @FindBy(id = "fetchIssueId")
+    private WebElement fetchIssueData;
+
+    @FindBy(id = "fetchIssueSubmit")
+    private WebElement fetchIssueSubmitButton;
+
+    @FindBy(id = "deleteIssueId")
+    private WebElement deleteIssueInput;
+
+    @FindBy(id = "deleteIssueSubmitButton")
+    private WebElement deleteIssueSubmitButton;
+
+    @FindBy(id = "successMessageDeleteIssue")
+    private WebElement deleteIssueSuccessMessage;
+
+    @FindBy(id = "fetchAllIssuesButton")
+    private WebElement fetchAllIssuesButton;
+
+    @FindBy(id = "updateOwnerEmail")
+    private WebElement updateOwnerEmailInput;
+
+    @FindBy(id = "updateIssueId")
+    private WebElement updateIssueIdInput;
+
+    @FindBy(id = "updateIssueTitle")
+    private WebElement updateIssueTitleInput;
+
+    @FindBy(id = "updateIssueDescription")
+    private WebElement updateIssueDescriptionInput;
+
+    @FindBy(id = "updateIssueSubmitButton")
+    private WebElement updateIssueSubmitButton;
+
+    @FindBy(id = "updateIssueSuccessMessage")
+    private WebElement updateIssueSuccessMessage;
 
     public IssuePage(WebDriver driver) {
         super(driver);
@@ -43,11 +79,50 @@ public class IssuePage extends ParentPOM {
         issueDescriptionInput.sendKeys(issueDescription);
     }
 
+    public void enterFetchIssueForm(String issueId) {
+        fetchIssueData.sendKeys(issueId);
+    }
+
     public void clickCreateIssueSubmit() {
         createIssueSubmitButton.click();
     }
 
     public String getSuccessMessageAddIssue() {
         return successMessageAddIssue.getText();
+    }
+
+    public void clickFetchIssueSubmit() {
+        fetchIssueSubmitButton.click();
+    }
+
+    public void enterDeleteIssueForm(String issueId) {
+        deleteIssueInput.sendKeys(issueId);
+    }
+
+    public void clickDeleteIssueSubmitButton() {
+        deleteIssueSubmitButton.click();
+    }
+
+    public String getSuccessMessageDeleteIssue() {
+        return deleteIssueSuccessMessage.getText();
+    }
+
+    public void clickFetchIssuesButton() {
+        fetchAllIssuesButton.click();
+    }
+
+    public void enterUpdateIssueForm(String email, String issueId, String title, String description) {
+        updateOwnerEmailInput.sendKeys(email);
+        updateIssueIdInput.sendKeys(issueId);
+        updateIssueTitleInput.sendKeys(title);
+        updateIssueDescriptionInput.sendKeys(description);
+    }
+
+    public void clickUpdateIssueSubmitButton() {
+        updateIssueSubmitButton.click();
+    }
+
+    public String getUpdateIssueSuccessMessage() {
+        return updateIssueSuccessMessage.getText();
     }
 }

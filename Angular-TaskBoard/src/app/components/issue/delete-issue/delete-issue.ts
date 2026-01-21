@@ -3,6 +3,7 @@ import { IssueService } from '../../../services/issue-service';
 import { FormsModule } from '@angular/forms';
 import { IssueData } from '../../../interfaces/issue-data';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-delete-issue',
@@ -35,7 +36,20 @@ export class DeleteIssue {
         this.deletedIssueData.set(responseData);
         this.issueService.getIssues()
         this.successMessageDeleteIssue.set(`Issue ${this.idDeleteValue} Deleted`);
+        this.errorMessage.set("");
         console.log(responseData);
+      },
+      error: (err) => {
+        console.log(err);
+        this.successMessageDeleteIssue.set("");
+        if(err instanceof HttpErrorResponse){
+            if(err.status == HttpStatusCode.NotFound.valueOf() || err.status == HttpStatusCode.BadRequest.valueOf()){
+              this.errorMessage.set("Issue not found");
+            }
+        }
+        else{
+          this.errorMessage.set("An unknown error has occured")
+        }
       }
     });
   }
