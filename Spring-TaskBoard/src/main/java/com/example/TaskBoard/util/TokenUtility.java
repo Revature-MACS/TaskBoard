@@ -17,16 +17,19 @@ import java.util.UUID;
 @Component
 public class TokenUtility {
 
-    private static String SECRET_KEY;
+    private static String SECRET_KEY = null;
 
     TokenUtility() throws IOException {
-        Properties envVars = new Properties();
-        Path envFile = Paths.get(".env");
-        try(InputStream inputStream = Files.newInputStream(envFile)){
-            envVars.load(inputStream);
-        }
+        // This gives the utility a singleton-like implementation
+        if(SECRET_KEY == null){
+            Properties envVars = new Properties();
+            Path envFile = Paths.get(".env");
+            try(InputStream inputStream = Files.newInputStream(envFile)){
+                envVars.load(inputStream);
+            }
 
-        SECRET_KEY = envVars.getProperty("SECRET_KEY");
+            SECRET_KEY = envVars.getProperty("SECRET_KEY");
+        }
     }
 
 
