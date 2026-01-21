@@ -21,6 +21,7 @@ public class TestFixtures {
     public static ProjectPage projectPage;
     public static DashboardPage dashboardPage;
     public static IssuePage issuePage;
+    public static LogsPage logsPage;
 
     @Before
     public void setup() {
@@ -37,6 +38,7 @@ public class TestFixtures {
         projectPage = new ProjectPage(driver);
         dashboardPage = new DashboardPage(driver);
         issuePage = new IssuePage(driver);
+        logsPage = new LogsPage(driver);
     }
 
     @After
