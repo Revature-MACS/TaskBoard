@@ -1,6 +1,6 @@
 <h2>Filter Issues</h2>
-<input type="text" placeholder="Filter by Title" #filterTitle>
-<select #statusSelect>
+<input id="filterTextInput" type="text" placeholder="Filter by Title" #filterTitle>
+<select id="filterStatusSelection" #statusSelect>
   <option value="">All Statuses</option>
   <option value="OPEN">OPEN</option>
   <option value="IN_PROGRESS">IN_PROGRESS</option>
@@ -8,25 +8,25 @@
   <option value="CLOSED">CLOSED</option>
 </select>
 
-<select #prioritySelect>
+<select id="filterPrioritySelection" #prioritySelect>
     <option value="">All Priorities</option>
     <option value="LOW">LOW</option>
     <option value="MEDIUM">MEDIUM</option>
     <option value="HIGH">HIGH</option>
   </select>
 
-  <select #severitySelect>
+  <select id="filterSeveritySelection" #severitySelect>
     <option value="">All Severities</option>
     <option value="LOW">LOW</option>
     <option value="MEDIUM">MEDIUM</option>
     <option value="HIGH">HIGH</option>
   </select>
 
-<button class="primary" type="button" (click)="applyFilters(filterTitle.value, statusSelect.value, prioritySelect.value, severitySelect.value)">
+<button id="submitFilterButton" class="primary" type="button" (click)="applyFilters(filterTitle.value, statusSelect.value, prioritySelect.value, severitySelect.value)">
   Search
 </button>
 
-<div *ngFor="let issue of filteredIssueList()" class="issue-card">
+<div id="filteredResultList" *ngFor="let issue of filteredIssueList()" class="issue-card">
   <p><strong>Issue ID:</strong> {{ issue.issueId }}</p>
   <p><strong>Project ID:</strong> {{ issue.projectId }}</p>
   <p><strong>Title:</strong> {{ issue.title }}</p>

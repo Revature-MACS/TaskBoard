@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 
 import static com.example.TaskBoard.e2e.fixtures.TestFixtures.wait;
 
@@ -66,6 +67,30 @@ public class IssuePage extends ParentPOM {
     @FindBy(id = "updateIssueSuccessMessage")
     private WebElement updateIssueSuccessMessage;
 
+    @FindBy(id = "errorMessageAddIssue")
+    private WebElement createIssueFailureMessage;
+
+    @FindBy(id = "errorMessageFetchIssue")
+    private WebElement fetchIssueFailureMessage;
+
+    @FindBy(id = "updateIssueStatus")
+    private WebElement updateIssueSelectElement;
+
+    @FindBy(id = "updateIssueErrorMessage")
+    private WebElement updateIssueErrorMessage;
+
+    @FindBy(id = "failMessageDeleteIssue")
+    private WebElement failMessageDeleteIssue;
+
+    @FindBy(id = "filterTextInput")
+    private WebElement filterTextInput;
+
+    @FindBy(id = "submitFilterButton")
+    private WebElement filterSubmitButton;
+
+    @FindBy(id = "filterPrioritySelection")
+    private WebElement filterPrioritySelection;
+
     public IssuePage(WebDriver driver) {
         super(driver);
     }
@@ -124,5 +149,44 @@ public class IssuePage extends ParentPOM {
 
     public String getUpdateIssueSuccessMessage() {
         return updateIssueSuccessMessage.getText();
+    }
+
+    public String getFailureMessageAddIssue() {
+        return createIssueFailureMessage.getText();
+    }
+
+    public String getFailureMessageFetchIssue() {
+        return fetchIssueFailureMessage.getText();
+    }
+
+    public void enterUpdateIssueFormIncorrectStatus(String email, String issueId, String title, String description, String status) {
+        Select select = new Select(updateIssueSelectElement);
+
+        updateOwnerEmailInput.sendKeys(email);
+        updateIssueIdInput.sendKeys(issueId);
+        updateIssueTitleInput.sendKeys(title);
+        updateIssueDescriptionInput.sendKeys(description);
+        select.selectByVisibleText(status);
+    }
+
+    public String getFailureMessageUpdateIssue() {
+        return updateIssueErrorMessage.getText();
+    }
+
+    public String getFailureMessageDeleteIssue() {
+        return failMessageDeleteIssue.getText();
+    }
+
+    public void enterFilterTitleForm(String filterTitle) {
+        filterTextInput.sendKeys(filterTitle);
+    }
+
+    public void clickFilterIssueButton() {
+        filterSubmitButton.click();
+    }
+
+    public void enterFilterPriorityForm(String filterPriority) {
+        Select select = new Select(filterPrioritySelection);
+        select.selectByVisibleText(filterPriority);
     }
 }

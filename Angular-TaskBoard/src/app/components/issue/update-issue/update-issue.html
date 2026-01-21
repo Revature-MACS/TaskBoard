@@ -9,7 +9,7 @@
     <textarea id="updateIssueDescription" placeholder="Description" rows="5" cols="30" [(ngModel)]="updateDescriptionText"></textarea>
     <br>
     <p style="display: inline;">Status: </p>
-    <select [(ngModel)]="updateStatusValue">
+    <select id="updateIssueStatus" [(ngModel)]="updateStatusValue">
         @for (item of issueStatusList; track $index) {
             <option [ngValue]="item">{{ item }}</option>
         }
