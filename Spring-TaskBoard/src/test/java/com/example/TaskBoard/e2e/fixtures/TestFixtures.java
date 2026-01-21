@@ -20,6 +20,7 @@ public class TestFixtures {
     public static LogoutPage logoutPage;
     public static ProjectPage projectPage;
     public static DashboardPage dashboardPage;
+    public static LogsPage logsPage;
 
     @Before
     public void setup() {
@@ -35,6 +36,7 @@ public class TestFixtures {
         logoutPage = new LogoutPage(driver);
         projectPage = new ProjectPage(driver);
         dashboardPage = new DashboardPage(driver);
+        logsPage = new LogsPage(driver);
     }
 
     @After
