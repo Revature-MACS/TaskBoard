@@ -15,5 +15,5 @@ INSERT INTO projectusers (project_user_id, FK_user_id, FK_project_id) VALUES ('a
 INSERT INTO issues (issue_id, title, description, status, priority, severity, project_id, owner_id, created_at) VALUES ('b1111111-1111-1111-1111-111111111111', 'Shopping cart not persisting', 'Items disappear from cart after page refresh', 0, 2, 2, '11111111-1111-1111-1111-111111111111', 'tester1@taskboard.com', 1705152000000);
 INSERT INTO issues (issue_id, title, description, status, priority, severity, project_id, owner_id, created_at) VALUES ('b2222222-2222-2222-2222-222222222222', 'Incorrect item descriptions', 'Items not appearing with correct item descriptions', 0, 1, 1, '11111111-1111-1111-1111-111111111111', 'tester1@taskboard.com', 1705152000000);
 
-INSERT INTO comments (comment_id, comment, creation_date, creation_time, creator_name, issue_id) VALUES ('c1111111-1111-1111-1111-111111111111', 'I can reproduce this consistently', '2024-01-13', '12:05:00', 'tester1@taskboard.com', 'b1111111-1111-1111-1111-111111111111');
+INSERT INTO comments (comment_id, comment, created_at, creator_name, issue_id) VALUES ('c1111111-1111-1111-1111-111111111111', 'I can reproduce this consistently', 1705152000000, 'tester1@taskboard.com', 'b1111111-1111-1111-1111-111111111111');
 
