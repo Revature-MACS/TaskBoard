@@ -1,8 +1,9 @@
-import { Component, signal, WritableSignal } from '@angular/core';
+import { Component, OnInit, signal, WritableSignal } from '@angular/core';
 import { IssueService } from '../../../services/issue-service';
 import { FormsModule } from '@angular/forms';
 import { IssueData } from '../../../interfaces/issue-data';
 import { Comments } from '../../comments/comments';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-fetch-issue',
@@ -12,6 +13,8 @@ import { Comments } from '../../comments/comments';
 })
 export class FetchIssue {
 
+  // issueData: IssueData | null = null;
+  id: string = "";
   idValue: string = "";
   titleText: string = "";
   descriptionText: string = "";
@@ -22,6 +25,7 @@ export class FetchIssue {
   timeCreatedValue: string = "";
   timeUpdatedValue: string = "";
   projectIdValue: string = "";
+  // issueDataValue: IssueData | null = null;
 
   issueTitle: WritableSignal<string> = signal("");
   issueDescription: WritableSignal<string> = signal("");
@@ -34,29 +38,19 @@ export class FetchIssue {
   issueProjectId:WritableSignal<string> = signal("");
   issueData:WritableSignal<IssueData | null> = signal(null)
   
-  constructor(private issueService: IssueService){
-    this.issueService.getIssueSubject().subscribe(
-      issueData => {
-        this.issueTitle.set(issueData.title);
-        this.issueDescription.set(issueData.description);
-        this.issueStatus.set(issueData.status);
-        this.issuePriority.set(issueData.priority);
-        this.issueSeverity.set(issueData.severity);
-        this.issueTimeCreated.set(issueData.timeCreatedAtEpoch);
-        this.issueTimeUpdated.set(issueData.timeUpdatedAtEpoch);
-        this.issueId.set(issueData.issueId)
-        this.issueProjectId.set(issueData.projectId)
-      }
-    );
-  }
-
-  getIssue(){
-    this.issueService.getIssueById(this.idValue).subscribe({
-      next: (responseData) => {
-        this.issueData.set(responseData);
-        console.log(responseData)
-      }
+  constructor(private issueService: IssueService, private router: Router, private route: ActivatedRoute ) {
+    this.route.queryParams.subscribe(params => {
+      this.id = params['id'];
     });
   }
+  
+
+  ngOnInit(){
+      this.issueService.getIssueById(this.id).subscribe(data => {
+          // this.issueData = data;
+            this.issueData.set(data);
+        });
+  }  
+
 
 }

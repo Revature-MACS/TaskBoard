@@ -1,16 +1,39 @@
 
 <div class="issue-list">
-    <h2>Fetch ALL issues</h2>
-    <button (click)="getIssues()">Fetch Issues</button>
-    <div *ngFor="let issue of issueList();" class="issue-card">
-            <p><strong>Issue ID:</strong> {{issue.issueId}}</p>
-            <p><strong>Project ID:</strong> {{issue.projectId}}</p>
-            <p><strong>Title:</strong> {{issue.title}} </p>
-            <p><strong>Description:</strong> {{issue.description}} </p>
-            <p><strong>Status:</strong> {{issue.status}} </p>
-            <p><strong>Priority:</strong> {{issue.priority}} </p>
-            <p><strong>Severity:</strong> {{issue.severity}} </p>
-            <p><strong>Time Created:</strong> {{issue.timeCreatedAtEpoch}} </p>
-            <p><strong>Time Updated:</strong> {{issue.timeUpdatedAtEpoch}} </p>
+    <div class="submenu">
+        <button (click)="showCreateIssueForm()"><i class="fa fa-plus" style="font-size:24px;color:green;"></i> Create Issue</button>
+        <button (click)="showSearchIssueForm()"><i class="fa fa-search" style="font-size:24px;color:blue;"></i> Search Issue</button>
     </div>
+    <h2>Fetch ALL issues</h2>
+    <button (click)="getIssues()"><i class="fa fa-refresh"></i></button>
+    <ul *ngFor="let issue of issueList();" class="table-list">
+        <li class="table-row header">
+            <span class="table-cell">Project ID</span>
+            <span class="table-cell">Issue ID</span>
+            <span class="table-cell">Title</span>
+            <span class="table-cell">Description</span>
+            <span class="table-cell">Status</span>
+            <span class="table-cell">Priority</span>
+            <span class="table-cell">Severity</span>
+            <span class="table-cell">Time Created</span>
+            <span class="table-cell">Time Updated</span>
+            <span></span>
+        </li>
+        <li class="table-row">
+            <span class="table-cell">{{issue.projectId}}</span>
+            <span class="table-cell">{{issue.issueId}}</span>
+            <span class="table-cell">{{ issue.title }}</span>
+            <span class="table-cell">{{issue.description}} </span>
+            <span class="table-cell">{{issue.status}} </span>
+            <span class="table-cell">{{issue.priority}} </span>
+            <span class="table-cell">{{issue.severity}} </span>
+            <span class="table-cell">{{issue.timeCreatedAtEpoch}} </span>
+            <span class="table-cell">{{issue.timeUpdatedAtEpoch}} </span>
+            <span class="table-cell">
+                <button (click)="selectIssue(issue.issueId)"><i class="fa fa-info-circle" style="font-size:24px;color:green; background-color: none;"></i></button>
+                <button (click)="delete(issue.issueId)"><i class="fa fa-trash-o" style="font-size:24px;color:red; background-color: none;"></i></button>
+                <button (click)="update(issue.issueId)"><i class="fa fa-pencil" style="font-size:24px;color:blue; background: none;"></i></button>
+            </span>
+        </li>
+    </ul>
 </div>

@@ -3,10 +3,10 @@
 
     <div class="add-comment">
         <h4>Add a Comment</h4>
-        <div class="form-group">
+        <!-- <div class="form-group">
             <label for="userEmail">Your Email:</label>
             <input id="userEmail" type="email" [(ngModel)]="userEmail" placeholder="Enter your email">
-        </div>
+        </div> -->
         <div class="form-group">
             <label for="commentText">Comment:</label>
             <textarea id="commentText" [(ngModel)]="newCommentText" placeholder="Write your comment..." rows="3"></textarea>
@@ -25,7 +25,7 @@
     <div *ngIf="isLoading()" class="loading-message">
         Loading comments...
     </div>
-
+    
     <div *ngIf="!isLoading() && comments().length > 0" class="comments-list">
         <h4>{{ comments().length }} Comment(s)</h4>
         <div *ngFor="let comment of comments()" class="comment-card">

@@ -7,6 +7,10 @@ import { Register } from './components/register/register';
 import { Logs } from './components/logs/logs';
 import { authGuard } from './guards/auth-guard';
 import { noAuthGuard } from './guards/no-auth-guard';
+import { CreateIssue } from './components/issue/createIssue/create-issue/create-issue';
+import { SearchIssue } from './components/issue/search-issue/search-issue';
+import { UpdateIssue } from './components/issue/update-issue/update-issue';
+import { FetchIssue } from './components/issue/fetch-issue/fetch-issue';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
@@ -14,6 +18,10 @@ export const routes: Routes = [
   { path: 'login', component: Login, canActivate: [noAuthGuard] },
   { path: 'register', component: Register, canActivate: [noAuthGuard] },
   { path: 'issue', component: Issue, canActivate: [authGuard] },
+  { path: 'create-issue', component: CreateIssue, canActivate: [authGuard] },
+  { path: 'search-issue', component: SearchIssue, canActivate: [authGuard] },
+  { path: 'update-issue', component: UpdateIssue, canActivate: [authGuard] },
+  { path: 'fetch-issue', component: FetchIssue, canActivate: [authGuard] },
   { path: 'project', component: Project, canActivate: [authGuard] },
   { path: 'logs', component: Logs, canActivate: [authGuard] },
 ];

@@ -1,12 +1,12 @@
 <div>
-    <h2>Fetch Issue by ID</h2>
-    <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
+    <h2>Issue Details</h2>
+    <!-- <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
     <button (click)="getIssue()">Submit</button>
     <br>
-    @if (issueData()) {
+    @if (issueData()) { -->
         <div class="issue-display">
-            <p><strong>Issue ID:</strong> {{issueData()?.issueId}}</p>
             <p><strong>Project ID:</strong> {{issueData()?.projectId}}</p>
+            <p><strong>Issue ID:</strong> {{issueData()?.issueId}}</p>
             <p><strong>Title:</strong> {{issueData()?.title}}</p>
             <p><strong>Description:</strong> {{issueData()?.description}}</p>
             <p><strong>Status:</strong> {{issueData()?.status}}</p>
@@ -16,6 +16,6 @@
             <p><strong>Time Updated:</strong> {{issueData()?.timeUpdatedAtEpoch}}</p>
         </div>
 
-        <app-comments [issueId]="issueData()?.issueId ?? ''"></app-comments>
-    }
+        <app-comments [issueId]="issueData()?.issueId"></app-comments>
+    <!-- } -->
 </div>
