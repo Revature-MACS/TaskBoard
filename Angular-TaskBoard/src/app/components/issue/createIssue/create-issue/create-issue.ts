@@ -3,6 +3,7 @@ import { IssueService } from '../../../../services/issue-service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IssueData } from '../../../../interfaces/issue-data';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-create-issue',
@@ -31,6 +32,7 @@ export class CreateIssue {
   issueId:WritableSignal<string> = signal("");
   issueDeleteId: WritableSignal<string> = signal("");
   issueProjectId: WritableSignal<string> = signal("");
+  errorMessage : WritableSignal<String> = signal("");
 
   titleText: string = "";
   descriptionText: string = "";
@@ -39,23 +41,34 @@ export class CreateIssue {
   severityValue: string = "Low";
   idValue: string = "";
   ownerEmailText: string = "";
-  projectId: string = "";
+  projectIdText: string = "";
 
   postIssue(){
-    this.issueTitle.set(this.titleText);
-    this.issueDescription.set(this.descriptionText);
-    this.issueStatus.set(this.statusValue);
-    this.issuePriority.set(this.priorityValue);
-    this.issueSeverity.set(this.severityValue);
-    this.issueProjectId.set(this.projectId);
     this.issueService
-      .postIssue(this.titleText, this.descriptionText, this.statusValue, this.priorityValue, this.severityValue, this.ownerEmailText, this.projectId)
+      .postIssue(this.titleText, this.descriptionText, this.statusValue, this.priorityValue, this.severityValue, this.ownerEmailText, this.projectIdText)
       .subscribe({
         next: (responseData) => {
           this.issueData.set(responseData); 
-          this.successMessageAddIssue.set(`Issue ${responseData.issueId} Created`)
-          console.log(responseData)
+          this.successMessageAddIssue.set(`Issue ${responseData.issueId} Created`);
+          this.errorMessage.set("");
+          console.log(responseData);
         },
+        error: (err) => {
+          console.log(err)
+          this.successMessageAddIssue.set("");
+          if(err instanceof HttpErrorResponse){
+            if(err.status == HttpStatusCode.Unauthorized.valueOf()){
+              this.errorMessage.set("Unauthorized user - Must be Tester");
+            }
+
+            else{
+              this.errorMessage.set(`Invalid Data - Server returned HTTP status ${err.status}`);
+            }
+          }
+          else {
+            this.errorMessage.set("An unknown error has occured")
+          }
+        }
       });
   }
 

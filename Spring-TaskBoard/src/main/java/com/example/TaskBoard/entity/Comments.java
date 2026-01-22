@@ -1,6 +1,7 @@
 package com.example.TaskBoard.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,27 +23,37 @@ public class Comments implements Serializable {
     @Column(nullable = false)
     private String comment;
 
-    @Column(name = "creation_date", nullable = false)
-//    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date;
+    @JsonIgnore
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Long timeCreatedAtEpoch;
 
-    @Column(name = "creation_time", nullable = false)
-//    @JsonFormat(pattern = "HH:mm:ss")
-    private LocalTime time;
+    @JsonIgnore
+    @Column(name = "updated_at")
+    private Long timeUpdatedAtEpoch;
+
+    @PrePersist
+    protected void onCreate() {
+        timeCreatedAtEpoch = System.currentTimeMillis();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        timeUpdatedAtEpoch = System.currentTimeMillis();
+    }
 
     @ManyToOne
-    @JoinColumn(name = "creator_name", nullable = true)
+    @JoinColumn(name = "creator_name", nullable = true, referencedColumnName = "email")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "issue_id", nullable = true)
+    @JoinColumn(name = "issue_id", nullable = true, referencedColumnName = "issue_id")
     private Issue issue;
 
-    public Comments(Long commentId, String comment, LocalDate date, LocalTime time, User user, Issue issue) {
+    public Comments(Long commentId, String comment, Long timeCreatedAtEpoch, Long timeUpdatedAtEpoch, User user, Issue issue) {
         this.commentId = commentId;
         this.comment = comment;
-        this.date = date;
-        this.time = time;
+        this.timeCreatedAtEpoch = timeCreatedAtEpoch;
+        this.timeUpdatedAtEpoch = timeUpdatedAtEpoch;
         this.user = user;
         this.issue = issue;
     }
@@ -61,22 +72,6 @@ public class Comments implements Serializable {
 
     public void setComment(String comment) {
         this.comment = comment;
-    }
-
-    public LocalDate getDate() {
-        return date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
     }
 
     public User getUser() {
@@ -100,8 +95,8 @@ public class Comments implements Serializable {
         return "Comments{" +
                 "commentId=" + commentId +
                 ", comment='" + comment + '\'' +
-                ", date=" + date +
-                ", time=" + time +
+                ", date=" + timeUpdatedAtEpoch +
+                ", time=" + timeUpdatedAtEpoch +
                 ", user=" + user +
                 ", issue=" + issue +
                 '}';

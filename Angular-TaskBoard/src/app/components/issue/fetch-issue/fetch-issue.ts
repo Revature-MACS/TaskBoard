@@ -3,6 +3,7 @@ import { IssueService } from '../../../services/issue-service';
 import { FormsModule } from '@angular/forms';
 import { IssueData } from '../../../interfaces/issue-data';
 import { Comments } from '../../comments/comments';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-fetch-issue',
@@ -33,6 +34,7 @@ export class FetchIssue {
   issueTimeUpdated:WritableSignal<string> = signal("");
   issueProjectId:WritableSignal<string> = signal("");
   issueData:WritableSignal<IssueData | null> = signal(null)
+  errorMessage : WritableSignal<String> = signal("");
   
   constructor(private issueService: IssueService){
     this.issueService.getIssueSubject().subscribe(
@@ -54,7 +56,20 @@ export class FetchIssue {
     this.issueService.getIssueById(this.idValue).subscribe({
       next: (responseData) => {
         this.issueData.set(responseData);
-        console.log(responseData)
+        this.errorMessage.set("");
+        console.log(responseData);
+      },
+      error: (err) => {
+        console.log(err);
+        this.issueData.set(null);
+        if(err instanceof HttpErrorResponse){
+            if(err.status == HttpStatusCode.NotFound.valueOf() || err.status == HttpStatusCode.BadRequest.valueOf()){
+              this.errorMessage.set("Issue not found");
+            }
+        }
+        else{
+          this.errorMessage.set("An unknown error has occured")
+        }
       }
     });
   }

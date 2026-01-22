@@ -6,7 +6,9 @@ import com.example.TaskBoard.entity.User;
 import com.example.TaskBoard.repository.IssueRepository;
 import com.example.TaskBoard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -93,7 +95,7 @@ public class IssueService {
         // Track owner + Auth Level
         User.UserRole userRole = authService.getAuthLevel(headerData);
         User owner = userRepository.findUserByEmail(issue.getOwner().getEmail())
-                .orElseThrow(() -> new RuntimeException("Owner not found"));
+                .orElseThrow(() -> new OwnerNotFoundException("Owner not found"));
 
         Optional<Issue> prevIssue = issueRepository.findById(issue.getIssueId());
         Issue previousIssue;
@@ -126,7 +128,7 @@ public class IssueService {
                     return issueRepository.save(issue);
                 }
                 else {
-                    throw new RuntimeException("Invalid Authorization");
+                    throw new InvalidAuthorizationException("Invalid Authorization");
                 }
             } // To In progress or Resolved
             else if(issue.getStatus() == Issue.IssueStatus.IN_PROGRESS || issue.getStatus() == Issue.IssueStatus.RESOLVED)
@@ -144,7 +146,7 @@ public class IssueService {
                     return issueRepository.save(issue);
                 }
                 else {
-                    throw new RuntimeException("Invalid Authorization");
+                    throw new InvalidAuthorizationException("Invalid Authorization");
                 }
             }
         }
@@ -156,4 +158,19 @@ public class IssueService {
         );
         return issueRepository.save(issue);
     }
+
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public class InvalidAuthorizationException extends RuntimeException {
+        public InvalidAuthorizationException(String message) {
+            super(message);
+        }
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public class OwnerNotFoundException extends RuntimeException {
+        public OwnerNotFoundException(String message) {
+            super(message);
+        }
+    }
+
 }

@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { IssueService } from '../../../services/issue-service';
 import { IssueData } from '../../../interfaces/issue-data';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-update-issue',
@@ -26,6 +27,7 @@ export class UpdateIssue {
   updateIssuePriority: WritableSignal<string> = signal("");
   updateIssueSeverity: WritableSignal<string> = signal("");
   updateIssueId:WritableSignal<string> = signal("");
+  errorMessage: WritableSignal<string> = signal("");
 
   updateTitleText: string = "";
   updateDescriptionText: string = "";
@@ -60,7 +62,28 @@ export class UpdateIssue {
       next: (responseData) => {
         this.issueData.set(responseData);
         this.successMessageUpdateIssue.set(`Issue ${responseData.issueId} Updated`)
+        this.errorMessage.set("");
       },
+      error: (err) => {
+        console.log(err);
+        this.successMessageUpdateIssue.set("");
+        if(err instanceof HttpErrorResponse){
+            if(err.status == HttpStatusCode.Forbidden.valueOf()){
+              this.errorMessage.set("Invalid Role");
+            }
+            else if(err.status == HttpStatusCode.NotFound.valueOf())
+            {
+              this.errorMessage.set("Issue not found");
+            }
+            else if(err.status == HttpStatusCode.BadRequest.valueOf())
+            {
+              this.errorMessage.set("Invalid Issue Data");
+            }
+        }
+        else{
+          this.errorMessage.set("An unknown error has occured")
+        }
+      }
     });
   }
 

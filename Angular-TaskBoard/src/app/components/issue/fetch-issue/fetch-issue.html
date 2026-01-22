@@ -1,10 +1,10 @@
 <div>
     <h2>Fetch Issue by ID</h2>
-    <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
-    <button (click)="getIssue()">Submit</button>
+    <input type="text" id="fetchIssueId" placeholder="Issue ID" [(ngModel)]="idValue">
+    <button id="fetchIssueSubmit" (click)="getIssue()">Submit</button>
     <br>
     @if (issueData()) {
-        <div class="issue-display">
+        <div id="fetchIssueData" class="issue-display">
             <p><strong>Issue ID:</strong> {{issueData()?.issueId}}</p>
             <p><strong>Project ID:</strong> {{issueData()?.projectId}}</p>
             <p><strong>Title:</strong> {{issueData()?.title}}</p>
@@ -17,5 +17,8 @@
         </div>
 
         <app-comments [issueId]="issueData()?.issueId ?? ''"></app-comments>
+    }
+    @if(errorMessage()){
+        <div id="errorMessageFetchIssue" class="error-message">{{ errorMessage() }}</div>
     }
 </div>

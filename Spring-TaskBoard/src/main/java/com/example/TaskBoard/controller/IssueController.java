@@ -43,13 +43,18 @@ public class IssueController {
     // GET - Get Issue by ID
     @GetMapping("/issues/{issueId}")
     public ResponseEntity<Issue> getIssueById(@PathVariable String issueId){
-        UUID issueUUID = UUID.fromString(issueId);
+        UUID issueUUID;
+        try {
+            issueUUID = UUID.fromString(issueId);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         Issue optionalIssue = issueService.findByIssueId(issueUUID);
         if(optionalIssue != null) {
             return ResponseEntity.status(HttpStatus.OK).body(optionalIssue);
         }
         else {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
@@ -63,8 +68,15 @@ public class IssueController {
     // DELETE - Delete issue by ID
     @DeleteMapping("issues/{issueId}")
     public ResponseEntity<Void> deleteIssueById(@PathVariable String issueId){
-        if(issueService.findByIssueId(UUID.fromString(issueId)) != null){
-            issueService.deleteIssue(UUID.fromString(issueId));
+        UUID issueUUID;
+        try {
+            issueUUID = UUID.fromString(issueId);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        if(issueService.findByIssueId(issueUUID) != null){
+            issueService.deleteIssue(issueUUID);
             return ResponseEntity.status(204).build();
         }
         else {
@@ -75,7 +87,14 @@ public class IssueController {
     // PUT - Update issue by ID
     @PutMapping("issues/{issueId}")
     public ResponseEntity<Issue> updateIssueById(@PathVariable String issueId, @RequestBody Issue issue, @RequestHeader String authorization){
-        issue.setIssueId(UUID.fromString(issueId));
+        UUID issueUUID;
+        try {
+            issueUUID = UUID.fromString(issueId);
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+
+        issue.setIssueId(issueUUID);
         Issue updatedIssue = issueService.updateIssue(issue, authorization);
         if(updatedIssue == null)
         {

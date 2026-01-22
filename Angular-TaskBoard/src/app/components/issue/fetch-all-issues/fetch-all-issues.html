@@ -1,8 +1,8 @@
 
 <div class="issue-list">
     <h2>Fetch ALL issues</h2>
-    <button (click)="getIssues()">Fetch Issues</button>
-    <div *ngFor="let issue of issueList();" class="issue-card">
+    <button id="fetchAllIssuesButton" (click)="getIssues()">Fetch Issues</button>
+    <div id="fetchAllIssues" *ngFor="let issue of issueList();" class="issue-card">
             <p><strong>Issue ID:</strong> {{issue.issueId}}</p>
             <p><strong>Project ID:</strong> {{issue.projectId}}</p>
             <p><strong>Title:</strong> {{issue.title}} </p>

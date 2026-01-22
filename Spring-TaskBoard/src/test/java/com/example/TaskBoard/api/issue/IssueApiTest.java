@@ -199,7 +199,7 @@ public class IssueApiTest {
         String token = getTesterAuthToken();
 
         given()
-                .pathParam("issueId", UUID.randomUUID().toString())
+                .pathParam("issueId", "INVALID-UUID")
                 .header("Authorization", "Bearer " + token)
                 .contentType(ContentType.JSON)
                 .when()
