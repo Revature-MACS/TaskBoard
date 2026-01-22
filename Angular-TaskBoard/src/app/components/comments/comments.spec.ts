@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Comments } from './comments';
 
@@ -17,5 +18,12 @@ describe('Comments', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+=======
+import { Comments } from './comments';
+
+describe('Comments', () => {
+  it('should create an instance', () => {
+    expect(new Comments()).toBeTruthy();
+>>>>>>> Stashed changes
   });
 });
