@@ -33,6 +33,11 @@ public class PasswordUtility {
             INIT_VECTOR = new GCMParameterSpec(128, ivString.getBytes(StandardCharsets.UTF_8));
 
             String keyText = envVars.getProperty("PASS_SECRET_KEY");
+
+            if(keyText.length() != 32){
+                throw new IllegalArgumentException("Password secret key is expected to be exactly 32 bytes long. Please check your key and try again.");
+            }
+
             return new SecretKeySpec(keyText.getBytes(StandardCharsets.UTF_8), "AES");
         }
 
