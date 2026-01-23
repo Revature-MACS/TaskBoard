@@ -1,11 +1,13 @@
 Feature: Comments for Issues
 
-  Background:
-    Given the user is on the issue page
-    When the user enters credentials "admin@taskboard.com" and "admin123"
-    And the user attempts to login
-    Then The user should be redirected to the dashboard
+  Scenario: Add comment to an issue
+    Given the user is logged in and on issue page
+    And   user is on an issue page
+    When  the user add comments to the issue
+    Then  the comments should be added successfully
 
-  Scenario:
-    When The user attempts to logout
-    Then The user should be redirected to login page
+  Scenario: Read comments attached to an issue
+    Given the user is logged in and on issue page
+    And   user is on an issue page
+    When  the user opens all comments to the issue
+    Then  all comments for an issue should be opened successfully
