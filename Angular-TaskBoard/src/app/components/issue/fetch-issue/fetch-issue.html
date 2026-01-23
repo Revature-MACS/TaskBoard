@@ -1,21 +1,29 @@
 <div>
     <h2>Issue Details</h2>
+    
     <!-- <input type="text" placeholder="Issue ID" [(ngModel)]="idValue">
     <button (click)="getIssue()">Submit</button>
     <br>
     @if (issueData()) { -->
-        <div class="issue-display">
-            <p><strong>Project ID:</strong> {{issueData()?.projectId}}</p>
-            <p><strong>Issue ID:</strong> {{issueData()?.issueId}}</p>
-            <p><strong>Title:</strong> {{issueData()?.title}}</p>
-            <p><strong>Description:</strong> {{issueData()?.description}}</p>
-            <p><strong>Status:</strong> {{issueData()?.status}}</p>
-            <p><strong>Priority:</strong> {{issueData()?.priority}}</p>
-            <p><strong>Severity:</strong> {{issueData()?.severity}}</p>
-            <p><strong>Time Created:</strong> {{issueData()?.timeCreatedAtEpoch}}</p>
-            <p><strong>Time Updated:</strong> {{issueData()?.timeUpdatedAtEpoch}}</p>
-        </div>
+    <div class="issue-display">
+        <p><strong>Project ID:</strong> {{issueData()?.projectId}}</p>
+        <p><strong>Issue ID:</strong> {{issueData()?.issueId}}</p>
+        <p><strong>Title:</strong> {{issueData()?.title}}</p>
+        <p><strong>Description:</strong> {{issueData()?.description}}</p>
+        <p><strong>Status:</strong> {{issueData()?.status}}</p>
+        <p><strong>Priority:</strong> {{issueData()?.priority}}</p>
+        <p><strong>Severity:</strong> {{issueData()?.severity}}</p>
+        <p><strong>Time Created:</strong> {{issueData()?.timeCreatedAtEpoch}}</p>
+        <p><strong>Time Updated:</strong> {{issueData()?.timeUpdatedAtEpoch}}</p>
+    </div>
 
-        <app-comments [issueId]="issueData()?.issueId"></app-comments>
+    <div id="loadCommentsButton">
+        <button (click)="loadAllComments()"><i class="fa fa-eye"></i> View Comments</button>
+    </div>
+
+    <div class="comment" id="showComment" hidden>
+        <app-comments [issueId]="issueData()?.issueId" ></app-comments>
+    </div>
+    
     <!-- } -->
 </div>

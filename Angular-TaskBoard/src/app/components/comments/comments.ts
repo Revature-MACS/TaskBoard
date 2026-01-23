@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { CommentsService } from '../../services/comments-service';
 import { CommentData, CreateCommentRequest } from '../../interfaces/comment-data';
+import { UserService } from '../../services/user-service';
+import { UserData } from '../../interfaces/user-data';
 
 @Component({
     selector: 'app-comments',
@@ -19,10 +21,10 @@ export class Comments implements OnChanges {
     successMessage: WritableSignal<string> = signal('');
 
     newCommentText: string = '';
-    userEmail: string = '';
+    userData: UserData | null = null;
 
     constructor(
-        private commentsService: CommentsService
+        private commentsService: CommentsService, private userService: UserService
     ) {}
 
     ngOnChanges(changes: SimpleChanges): void {
@@ -43,7 +45,7 @@ export class Comments implements OnChanges {
                 this.isLoading.set(false);
             },
             error: (err) => {
-                this.errorMessage.set('Failed to load comments');
+                // this.errorMessage.set('There is no comments for this issue yet.');
                 this.isLoading.set(false);
                 console.error(err);
             }
@@ -51,8 +53,8 @@ export class Comments implements OnChanges {
     }
 
     addComment(): void {
-        if (!this.newCommentText.trim() || !this.userEmail.trim()) {
-            this.errorMessage.set('Please enter both your email and a comment');
+        if (!this.newCommentText.trim()) {
+            this.errorMessage.set('Please enter a comment');
             return;
         }
 
@@ -64,7 +66,7 @@ export class Comments implements OnChanges {
             comment: this.newCommentText,
             date: now.toISOString().split('T')[0],
             time: now.toTimeString().split(' ')[0],
-            user: { email: this.userEmail },
+            user: this.userService.getCurrentUserSubject().value,            
             issue: { issueId: this.issueId }
         };
 
@@ -84,6 +86,11 @@ export class Comments implements OnChanges {
     formatDateTime(date: string, time: string): string {
         if (!date) return '';
         return `${date} ${time || ''}`;
+    }
+
+    addNewComment(){
+        document.getElementById("add-comment").style.display = "block";
+        document.getElementById("addButton").style.display = "none";
     }
 
 }

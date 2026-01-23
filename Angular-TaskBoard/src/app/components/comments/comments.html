@@ -1,7 +1,24 @@
 <div class="comments-section">
     <h3>Comments</h3>
 
-    <div class="add-comment">
+    <div class="comments">
+        <!-- Example static comments section (plain HTML) -->
+        <div class="comment-card" *ngFor="let comment of comments();">
+            <div class="comment-header">
+                <span class="comment-author">{{ comment.user?.name || comment.user?.email || 'Anonymous' }}</span>
+                <span class="comment-date">{{ formatDateTime(comment.date, comment.time) }}</span>
+            </div>
+            <div class="comment-body">
+                {{ comment.comment }}
+            </div>
+        </div>
+
+        <button (click)="addNewComment()" id="addButton"><i class="fa fa-plus"></i> </button>
+
+
+    </div>
+
+    <div class="add-comment" id="add-comment" hidden>
         <h4>Add a Comment</h4>
         <!-- <div class="form-group">
             <label for="userEmail">Your Email:</label>

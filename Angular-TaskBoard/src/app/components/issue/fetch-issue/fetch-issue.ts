@@ -52,5 +52,10 @@ export class FetchIssue {
         });
   }  
 
+  loadAllComments(){
+    // this.router.navigate(['/comments'], { queryParams: {id: this.id} });
+    document.getElementById("showComment").style.display = "block";
+    document.getElementById("loadCommentsButton").style.display = "none";
+  }
 
 }

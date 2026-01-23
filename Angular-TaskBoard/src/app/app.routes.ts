@@ -11,6 +11,7 @@ import { CreateIssue } from './components/issue/createIssue/create-issue/create-
 import { SearchIssue } from './components/issue/search-issue/search-issue';
 import { UpdateIssue } from './components/issue/update-issue/update-issue';
 import { FetchIssue } from './components/issue/fetch-issue/fetch-issue';
+import { Comments } from './components/comments/comments';
 
 export const routes: Routes = [
   { path: '', pathMatch: 'full', redirectTo: '/login' },
@@ -22,6 +23,7 @@ export const routes: Routes = [
   { path: 'search-issue', component: SearchIssue, canActivate: [authGuard] },
   { path: 'update-issue', component: UpdateIssue, canActivate: [authGuard] },
   { path: 'fetch-issue', component: FetchIssue, canActivate: [authGuard] },
+  { path: 'comments', component: Comments, canActivate: [authGuard] },
   { path: 'project', component: Project, canActivate: [authGuard] },
   { path: 'logs', component: Logs, canActivate: [authGuard] },
 ];
