@@ -1,4 +1,4 @@
-package com.example.TaskBoard.api.issue;
+package com.example.TaskBoard.api;
 
 import com.example.TaskBoard.entity.Issue;
 import com.example.TaskBoard.entity.Project;
